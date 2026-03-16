@@ -7,80 +7,55 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root {
-  --bg:#F0F4F8; --surface:#fff; --navy:#0B2545; --navy2:#13376E;
-  --blue:#1A6FBF; --green:#1A8A5A; --amber:#C77B1A; --red:#C0392B; --purple:#6B3FA0;
-  --text:#1A2733; --muted:#64748B; --border:#DDE4EE; --r:14px;
-}
+:root{--bg:#F0F4F8;--surface:#fff;--navy:#0B2545;--navy2:#13376E;--blue:#1A6FBF;--green:#1A8A5A;--amber:#C77B1A;--red:#C0392B;--purple:#6B3FA0;--text:#1A2733;--muted:#64748B;--border:#DDE4EE;--r:14px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-
-/* HEADER */
-header{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:0 28px;display:flex;align-items:center;min-height:72px;gap:20px;position:relative;overflow:hidden}
-header::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
-.h-emblem{width:44px;height:44px;background:linear-gradient(135deg,var(--blue),#0E8A8A);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 3px 10px rgba(0,0,0,0.3);flex-shrink:0;z-index:1}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:0 28px;display:flex;align-items:center;min-height:76px;gap:18px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
+.h-emblem{display:flex;align-items:center;flex-shrink:0;z-index:1}
 .h-info{z-index:1}
-.h-info .h-sub{font-size:9px;letter-spacing:.16em;color:rgba(255,255,255,0.5);text-transform:uppercase;margin-bottom:3px}
-.h-info .h-title{font-family:'DM Serif Display',serif;font-size:17px;color:#fff;line-height:1.2}
-.h-sep{width:1px;height:36px;background:rgba(255,255,255,0.12);margin:0 4px;z-index:1}
-.h-pagetitle{font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:.1em;text-transform:uppercase;z-index:1;flex:1}
+.h-info .h-sub{font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:3px}
+.h-info .h-title{font-family:"DM Serif Display",serif;font-size:18px;color:#fff;line-height:1.2;font-weight:700}
+.h-sep{width:1px;height:36px;background:rgba(255,255,255,.12);margin:0 4px;z-index:1}
+.h-pagetitle{font-size:15px;font-weight:700;color:rgba(255,255,255,.92);letter-spacing:.05em;text-transform:uppercase;z-index:1;flex:1}
 .h-right{display:flex;align-items:center;gap:14px;z-index:1}
-.h-badge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:5px 12px;font-size:10px;color:rgba(255,255,255,0.65);letter-spacing:.08em;text-transform:uppercase}
-.h-clock .time{font-family:'DM Serif Display',serif;font-size:24px;color:#fff;text-align:right;line-height:1}
-.h-clock .date{font-size:10px;color:rgba(255,255,255,0.45);text-align:right;margin-top:2px}
-
-/* TOOLBAR */
+.h-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:5px 13px;font-size:11px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:.08em;text-transform:uppercase}
+.h-clock .time{font-family:"DM Serif Display",serif;font-size:30px;color:#fff;text-align:right;line-height:1}
+.h-clock .date{font-size:13px;color:rgba(255,255,255,.75);text-align:right;margin-top:3px;font-weight:500}
 .toolbar{background:var(--surface);border-bottom:1px solid var(--border);padding:9px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.update-info{font-size:12px;color:var(--muted);flex:1}
-.update-info b{color:var(--blue)}
-.btn{padding:7px 16px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
-.btn-primary{background:var(--blue);color:#fff;box-shadow:0 2px 6px rgba(26,111,191,.3)}
-.btn-primary:hover{background:#1560a8;transform:translateY(-1px)}
-.btn-primary:disabled{background:#93C5FD;cursor:not-allowed;transform:none}
-.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
-.btn-ghost:hover{color:var(--red);border-color:#FECACA;background:#FFF5F5}
+.update-info{font-size:12px;color:var(--muted);flex:1}.update-info b{color:var(--blue)}
+.btn{padding:7px 16px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;font-family:"DM Sans",sans-serif;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 2px 6px rgba(26,111,191,.3)}.btn-primary:hover{background:#1560a8;transform:translateY(-1px)}.btn-primary:disabled{background:#93C5FD;cursor:not-allowed;transform:none}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-ghost:hover{color:var(--red);border-color:#FECACA;background:#FFF5F5}
+.btn-login{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff}
 .spinner{width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 main{padding:20px 24px;max-width:1400px;margin:0 auto}
-
-/* ALERT */
 .alert-banner{background:#FFF5F5;border:1px solid #FED7D7;border-left:4px solid var(--red);border-radius:var(--r);padding:11px 16px;margin-bottom:18px;display:none;align-items:center;gap:10px;animation:pa 2.5s ease-in-out infinite}
-.alert-banner.show{display:flex}
-@keyframes pa{0%,100%{border-left-color:var(--red)}50%{border-left-color:#FC8181}}
-.alert-banner b{color:var(--red);font-size:12px}
-.alert-banner span{color:#9B2C2C;font-size:12px;margin-left:5px}
-
-/* KPI ROW */
+.alert-banner.show{display:flex}@keyframes pa{0%,100%{border-left-color:var(--red)}50%{border-left-color:#FC8181}}
+.alert-banner b{color:var(--red);font-size:12px}.alert-banner span{color:#9B2C2C;font-size:12px;margin-left:5px}
 .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.kpi-card{background:var(--surface);border-radius:var(--r);padding:16px 18px;border-left:4px solid var(--accent,var(--blue));box-shadow:0 1px 4px rgba(0,0,0,.06);transition:transform .18s}
-.kpi-card:hover{transform:translateY(-2px)}
+.kpi-card{background:var(--surface);border-radius:var(--r);padding:16px 18px;border-left:4px solid var(--accent,var(--blue));box-shadow:0 1px 4px rgba(0,0,0,.06);transition:transform .18s}.kpi-card:hover{transform:translateY(-2px)}
 .kpi-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:500}
-.kpi-value{font-family:'DM Serif Display',serif;font-size:30px;color:var(--text);margin:3px 0 2px;line-height:1}
+.kpi-value{font-family:"DM Serif Display",serif;font-size:30px;color:var(--text);margin:3px 0 2px;line-height:1}
 .kpi-sub{font-size:11px;color:var(--muted)}
-
-/* SECTION TITLE */
 .sec{display:flex;align-items:center;justify-content:space-between;margin:4px 0 12px}
 .sec h2{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.1em;display:flex;align-items:center;gap:7px}
-.sec h2::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--blue);display:block}
+.sec h2::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--blue);display:block}
 .pill{font-size:10px;font-weight:600;padding:2px 9px;border-radius:99px;letter-spacing:.06em;text-transform:uppercase}
-.pill-blue{background:#EFF6FF;color:var(--blue);border:1px solid #BFDBFE}
-.pill-green{background:#F0FDF4;color:var(--green);border:1px solid #BBF7D0}
-
-/* UNIT CARDS GRID */
+.pill-blue{background:#EFF6FF;color:var(--blue);border:1px solid #BFDBFE}.pill-green{background:#F0FDF4;color:var(--green);border:1px solid #BBF7D0}
 .units-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-bottom:20px}
 .unit-card{background:var(--surface);border-radius:var(--r);padding:16px;border:1.5px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.05);transition:all .18s;position:relative;overflow:hidden}
 .unit-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.12)}.unit-card:hover .uc-name{color:var(--blue)}
-.unit-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--uc-color,#DDE4EE)}
+.unit-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--uc-color,#DDE4EE)}
 .uc-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.3;min-height:30px}
 .uc-gauge{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:8px}
-.uc-pct{font-family:'DM Serif Display',serif;font-size:32px;line-height:1;font-weight:700}
+.uc-pct{font-family:"DM Serif Display",serif;font-size:32px;line-height:1;font-weight:700}
 .uc-counts{text-align:right;font-size:11px;color:var(--muted);line-height:1.6}
 .uc-bar-bg{height:6px;background:#EEF2F7;border-radius:99px;overflow:hidden;margin-bottom:8px}
 .uc-bar-fill{height:100%;border-radius:99px;transition:width .9s cubic-bezier(.4,0,.2,1)}
 .uc-footer{display:flex;justify-content:space-between;align-items:center}
-.uc-avail{font-size:11px;color:var(--muted)}
-.uc-avail b{color:var(--green)}
+.uc-avail{font-size:11px;color:var(--muted)}.uc-avail b{color:var(--green)}
 .badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:.07em;text-transform:uppercase}
 .bc{background:#FFF5F5;color:var(--red);border:1px solid #FED7D7}
 .bw{background:#FFFBEB;color:var(--amber);border:1px solid #FDE68A}
@@ -88,81 +63,62 @@ main{padding:20px 24px;max-width:1400px;margin:0 auto}
 .bz{background:#F8FAFC;color:#94A3B8;border:1px solid #E2E8F0}
 .bo{background:#FAF5FF;color:var(--purple);border:1px solid #DDD6FE}
 .bl{background:#F0FDFB;color:#0E8A8A;border:1px solid #99F6E4}
-
-/* TABLE */
+.blot{background:#FFF0F0;color:var(--red);border:1px solid #FECACA;font-weight:800}
 .table-card{background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid var(--border);margin-bottom:20px}
 table{width:100%;border-collapse:collapse}
 thead tr{background:var(--navy)}
 thead th{color:rgba(255,255,255,.85);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;padding:11px 14px;text-align:left}
 thead th:not(:first-child){text-align:center}
-tbody tr{border-bottom:1px solid #F1F5F9;transition:background .12s}
-tbody tr:last-child{border-bottom:none}
-tbody tr:hover{background:#F8FBFF}
-tbody td{padding:10px 14px;font-size:13px;color:#374151}
-tbody td:not(:first-child){text-align:center}
+tbody tr{border-bottom:1px solid #F1F5F9;transition:background .12s}tbody tr:last-child{border-bottom:none}tbody tr:hover{background:#F8FBFF}
+tbody td{padding:10px 14px;font-size:13px;color:#374151}tbody td:not(:first-child){text-align:center}
 .pct-wrap{display:flex;align-items:center;justify-content:center;gap:7px}
 .pct-bg{width:72px;height:6px;background:#EEF2F7;border-radius:99px;overflow:hidden}
 .pct-fill{height:100%;border-radius:99px}
-
-/* CHARTS */
 .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
 .chart-card{background:var(--surface);border-radius:var(--r);padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid var(--border)}
 .ch-title{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.09em}
 .ch-sub{font-size:11px;color:var(--muted);margin-top:2px;margin-bottom:14px}
-
-/* HISTORY */
 .history-card{background:var(--surface);border-radius:var(--r);padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid var(--border);margin-bottom:20px}
 .history-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}
 .history-table th{background:#F8FAFC;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:600}
 .history-table td{padding:8px 12px;border-bottom:1px solid #F1F5F9;color:#374151}
-.history-table tr:last-child td{border-bottom:none}
-.history-table tr:hover td{background:#F8FBFF}
-.empty-state{text-align:center;padding:36px 20px;color:#94A3B8;font-size:13px}
-.empty-state .icon{font-size:34px;margin-bottom:8px}
-footer{text-align:right;font-size:11px;color:#CBD5E1;padding-bottom:20px}
-
-@media(max-width:900px){
-  .kpi-row{grid-template-columns:repeat(2,1fr)}
-  .charts-row{grid-template-columns:1fr}
-  header{flex-wrap:wrap;padding:12px 16px;min-height:auto;gap:10px}
-  .h-sep,.h-pagetitle{display:none}
-}
-
-/* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(11,37,69,0.55);backdrop-filter:blur(3px);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
+.history-table tr:last-child td{border-bottom:none}.history-table tr:hover td{background:#F8FBFF}
+.empty-state{text-align:center;padding:36px 20px;color:#94A3B8;font-size:13px}.empty-state .icon{font-size:34px;margin-bottom:8px}
+.modal-overlay{position:fixed;inset:0;background:rgba(11,37,69,.55);backdrop-filter:blur(3px);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
-.modal{background:var(--surface);border-radius:18px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.25);animation:modalIn .22s cubic-bezier(.4,0,.2,1)}
+.modal{background:var(--surface);border-radius:18px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:modalIn .22s cubic-bezier(.4,0,.2,1)}
 @keyframes modalIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .modal-header{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:20px 24px;border-radius:18px 18px 0 0;display:flex;justify-content:space-between;align-items:flex-start;position:sticky;top:0;z-index:2}
-.modal-header .mh-title{font-family:'DM Serif Display',serif;font-size:18px;color:#fff;line-height:1.2}
+.modal-header .mh-title{font-family:"DM Serif Display",serif;font-size:18px;color:#fff;line-height:1.2}
 .modal-header .mh-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px}
-.modal-close{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:18px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
-.modal-close:hover{background:rgba(255,255,255,.2)}
+.modal-close{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:18px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}.modal-close:hover{background:rgba(255,255,255,.2)}
 .modal-body{padding:22px 24px}
 .modal-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 .mkpi{background:var(--bg);border-radius:12px;padding:14px 16px;border-left:4px solid var(--accent,var(--blue))}
 .mkpi .ml{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:500}
-.mkpi .mv{font-family:'DM Serif Display',serif;font-size:26px;color:var(--text);margin:3px 0 2px}
+.mkpi .mv{font-family:"DM Serif Display",serif;font-size:26px;color:var(--text);margin:3px 0 2px}
 .mkpi .ms{font-size:11px;color:var(--muted)}
 .modal-charts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
-.mchart{background:var(--bg);border-radius:12px;padding:16px}
-.mchart.full{grid-column:span 2}
+.mchart{background:var(--bg);border-radius:12px;padding:16px}.mchart.full{grid-column:span 2}
 .mct{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.09em;margin-bottom:3px}
 .mcs{font-size:10px;color:var(--muted);margin-bottom:12px}
 .modal-hist-table{width:100%;border-collapse:collapse;font-size:12px}
 .modal-hist-table th{background:#F8FAFC;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);font-weight:600}
 .modal-hist-table td{padding:8px 12px;border-bottom:1px solid #F1F5F9;color:#374151}
-.modal-hist-table tr:last-child td{border-bottom:none}
-.modal-hist-table tr:hover td{background:#F8FBFF}
+.modal-hist-table tr:last-child td{border-bottom:none}.modal-hist-table tr:hover td{background:#F8FBFF}
 .modal-empty{text-align:center;padding:30px;color:var(--muted);font-size:12px}
+footer{text-align:right;font-size:11px;color:#94A3B8;padding-bottom:20px;line-height:1.8}
+@media(max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}header{flex-wrap:wrap;padding:12px 16px;min-height:auto;gap:10px}.h-sep,.h-pagetitle{display:none}}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="h-emblem">🏥</div>
+  <div class="h-emblem">
+    <img src="data:image/jpeg;base64,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" alt="HMIPV" style="height:60px;width:auto;display:block;border-radius:8px;background:#fff;padding:4px"/>
+  </div>
   <div class="h-info">
-    <div class="h-sub">HMIPV · Porto Alegre · RS · 100% SUS</div>
+    <div class="h-sub">Porto Alegre · RS · 100% SUS · SMS PMPA</div>
     <div class="h-title">Hospital Materno Infantil Presidente Vargas</div>
   </div>
   <div class="h-sep"></div>
@@ -177,22 +133,23 @@ footer{text-align:right;font-size:11px;color:#CBD5E1;padding-bottom:20px}
 </header>
 
 <div class="toolbar">
-  <div class="update-info" id="update-info">Clique em <b>Capturar Dados</b> para buscar os dados atuais e salvar no histórico.</div>
+  <div class="update-info" id="update-info">Conectando ao banco de dados...</div>
   <div style="font-size:11px;color:#64748B;display:flex;align-items:center;gap:5px;white-space:nowrap">
     🔄 Próxima atualização: <b id="countdown" style="color:#1A6FBF">60:00</b>
   </div>
-  <button class="btn btn-ghost" onclick="clearHistory()">🗑 Limpar Histórico</button>
-  <button class="btn btn-primary" id="btn-fetch" onclick="fetchData()">📥 Capturar Dados</button>
+  <button class="btn btn-login" id="btn-login" onclick="doLogin()">🔐 Admin</button>
+  <div id="admin-btns" style="display:none;gap:8px;align-items:center">
+    <button class="btn btn-ghost" onclick="clearHistory()">🗑 Limpar</button>
+    <button class="btn btn-primary" id="btn-fetch" onclick="fetchData()">📥 Capturar Dados</button>
+  </div>
 </div>
 
 <main>
-
   <div class="alert-banner" id="alert-banner">
     <span style="font-size:17px">🚨</span>
     <div><b>ALERTA DE LOTAÇÃO —</b><span id="alert-text"></span></div>
   </div>
 
-  <!-- KPIs -->
   <div class="kpi-row">
     <div class="kpi-card" style="--accent:#1A6FBF">
       <div class="kpi-label">Ocupação Atual</div>
@@ -216,16 +173,14 @@ footer{text-align:right;font-size:11px;color:#CBD5E1;padding-bottom:20px}
     </div>
   </div>
 
-  <!-- UNIT CARDS -->
   <div class="sec">
     <h2>Ocupação por Unidade</h2>
     <span class="pill pill-blue" id="ts-pill">Dados Atualizados</span>
   </div>
   <div class="units-grid" id="units-grid">
-    <div class="empty-state" style="grid-column:1/-1"><div class="icon">🏥</div>Clique em "Capturar Dados" para carregar</div>
+    <div class="empty-state" style="grid-column:1/-1"><div class="icon">🏥</div>Aguardando dados...</div>
   </div>
 
-  <!-- TABLE -->
   <div class="sec">
     <h2>Resumo Geral</h2>
     <span class="pill pill-green" id="hist-count-pill">0 registros</span>
@@ -233,678 +188,377 @@ footer{text-align:right;font-size:11px;color:#CBD5E1;padding-bottom:20px}
   <div class="table-card">
     <table>
       <thead><tr><th>Unidade</th><th>Leitos</th><th>Pacientes</th><th>% Ocupação</th><th>Status</th></tr></thead>
-      <tbody id="units-tbody">
-        <tr><td colspan="5"><div class="empty-state"><div class="icon">📋</div>Clique em "Capturar Dados" para carregar</div></td></tr>
-      </tbody>
+      <tbody id="units-tbody"><tr><td colspan="5"><div class="empty-state"><div class="icon">📋</div>Aguardando dados...</div></td></tr></tbody>
     </table>
   </div>
 
-  <!-- CHARTS -->
   <div class="charts-row">
     <div class="chart-card">
-      <div class="ch-title">Ocupação por Unidade</div>
-      <div class="ch-sub">% ocupação atual por setor</div>
-      <canvas id="barChart" height="220"></canvas>
+      <div class="ch-title">Ranking de Ocupação</div>
+      <div class="ch-sub">Unidades ordenadas da maior para menor ocupação</div>
+      <canvas id="barChart" height="280"></canvas>
     </div>
     <div class="chart-card">
-      <div class="ch-title">Histórico — Ocupação Geral</div>
-      <div class="ch-sub">Evolução das capturas salvas</div>
-      <canvas id="lineChart" height="220"></canvas>
+      <div class="ch-title">Histórico — Média Diária</div>
+      <div class="ch-sub">Evolução da ocupação geral ao longo dos dias</div>
+      <canvas id="lineChart" height="280"></canvas>
     </div>
   </div>
 
-  <!-- HISTORY -->
   <div class="history-card">
-    <div class="sec" style="margin-bottom:0">
+    <div class="sec" style="margin-bottom:0;cursor:pointer" onclick="toggleHistory()">
       <h2>Histórico de Capturas</h2>
+      <span class="pill pill-blue" id="toggle-hist-btn">▼ Mostrar</span>
     </div>
-    <div id="history-container">
+    <div id="history-container" style="display:none;margin-top:14px">
       <div class="empty-state"><div class="icon">🗂</div>Nenhuma captura salva ainda.</div>
     </div>
   </div>
 
+  <footer>
+    HMIPV · Dashboard de Ocupação · Direção Executiva · Dados salvos localmente neste navegador<br>
+    Desenvolvido por Bryan Ansuj, Kaline Calduro, Lauren Ruas e Marcelo Lucho
+  </footer>
+</main>
 
-<!-- UNIT DETAIL MODAL -->
+<!-- MODAL -->
 <div class="modal-overlay" id="unit-modal" onclick="closeModal(event)">
   <div class="modal" id="modal-inner">
     <div class="modal-header">
       <div>
         <div class="mh-title" id="modal-title">Unidade</div>
-        <div class="mh-sub" id="modal-sub">Hospital Materno Infantil Presidente Vargas</div>
+        <div class="mh-sub" id="modal-sub">HMIPV</div>
       </div>
       <button class="modal-close" onclick="closeModalBtn()">✕</button>
     </div>
     <div class="modal-body">
       <div class="modal-kpis">
-        <div class="mkpi" id="mkpi-atual" style="--accent:#1A6FBF">
-          <div class="ml">Ocupação Atual</div>
-          <div class="mv" id="m-atual">—</div>
-          <div class="ms" id="m-atual-sub">—</div>
-        </div>
-        <div class="mkpi" id="mkpi-7d" style="--accent:#0E8A8A">
-          <div class="ml">Média — Últimos 7 dias</div>
-          <div class="mv" id="m-7d">—</div>
-          <div class="ms" id="m-7d-sub">—</div>
-        </div>
-        <div class="mkpi" id="mkpi-mes" style="--accent:#6B3FA0">
-          <div class="ml">Taxa do Mês</div>
-          <div class="mv" id="m-mes">—</div>
-          <div class="ms" id="m-mes-sub">—</div>
-        </div>
-        <div class="mkpi" style="--accent:#1A8A5A">
-          <div class="ml">Leitos Totais</div>
-          <div class="mv" id="m-leitos">—</div>
-          <div class="ms">capacidade instalada</div>
-        </div>
-        <div class="mkpi" style="--accent:#1A8A5A">
-          <div class="ml">Disponíveis Agora</div>
-          <div class="mv" id="m-avail">—</div>
-          <div class="ms" id="m-avail-sub">—</div>
-        </div>
-        <div class="mkpi" style="--accent:#C0392B">
-          <div class="ml">Pico Histórico</div>
-          <div class="mv" id="m-pico">—</div>
-          <div class="ms" id="m-pico-sub">maior ocupação registrada</div>
-        </div>
+        <div class="mkpi" style="--accent:#1A6FBF"><div class="ml">Ocupação Atual</div><div class="mv" id="m-atual">—</div><div class="ms" id="m-atual-sub">—</div></div>
+        <div class="mkpi" style="--accent:#0E8A8A"><div class="ml">Média — Últimos 7 dias</div><div class="mv" id="m-7d">—</div><div class="ms" id="m-7d-sub">—</div></div>
+        <div class="mkpi" style="--accent:#6B3FA0"><div class="ml">Taxa do Mês</div><div class="mv" id="m-mes">—</div><div class="ms" id="m-mes-sub">—</div></div>
+        <div class="mkpi" style="--accent:#1A8A5A"><div class="ml">Leitos Totais</div><div class="mv" id="m-leitos">—</div><div class="ms">capacidade instalada</div></div>
+        <div class="mkpi" style="--accent:#1A8A5A"><div class="ml">Disponíveis Agora</div><div class="mv" id="m-avail">—</div><div class="ms">leitos livres</div></div>
+        <div class="mkpi" style="--accent:#C0392B"><div class="ml">Pico Histórico</div><div class="mv" id="m-pico">—</div><div class="ms" id="m-pico-sub">maior ocupação</div></div>
       </div>
-
       <div class="modal-charts">
-        <div class="mchart full">
-          <div class="mct">Histórico de Ocupação</div>
-          <div class="mcs">Evolução ao longo de todas as capturas</div>
-          <canvas id="m-line-chart" height="140"></canvas>
-        </div>
-        <div class="mchart">
-          <div class="mct">Distribuição de Status</div>
-          <div class="mcs">Capturas por nível de ocupação</div>
-          <canvas id="m-donut-chart" height="160"></canvas>
-        </div>
-        <div class="mchart">
-          <div class="mct">Últimas 10 Capturas</div>
-          <div class="mcs">Ocupação mais recente</div>
-          <canvas id="m-bar-chart" height="160"></canvas>
-        </div>
+        <div class="mchart full"><div class="mct">Histórico de Ocupação</div><div class="mcs">Média diária ao longo do tempo</div><canvas id="m-line-chart" height="140"></canvas></div>
+        <div class="mchart"><div class="mct">Distribuição de Status</div><div class="mcs">Capturas por nível</div><canvas id="m-donut-chart" height="160"></canvas></div>
+        <div class="mchart"><div class="mct">Tendência — Semana Atual</div><div class="mcs">Média diária dos últimos 7 dias</div><canvas id="m-bar-chart" height="160"></canvas></div>
       </div>
-
       <div style="margin-bottom:12px">
-        <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px">📋 Histórico Detalhado</div>
-        <div id="modal-hist-container"><div class="modal-empty">Sem histórico disponível</div></div>
+        <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleModalHist()">
+          <span>📋 Histórico Detalhado</span>
+          <span id="modal-hist-btn" style="font-size:10px;font-weight:600;padding:2px 10px;border-radius:99px;background:#EFF6FF;color:#1A6FBF;border:1px solid #BFDBFE">▼ MOSTRAR</span>
+        </div>
+        <div id="modal-hist-container" style="display:none"><div class="modal-empty">Sem histórico disponível</div></div>
       </div>
     </div>
   </div>
 </div>
-  <footer>HMIPV · Dashboard de Ocupação · Direção Executiva · Dados salvos localmente neste navegador</footer>
-</main>
 
-<script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3CTu39_2qQbBWl7Ik4qShRtAmUwmVIKZVZALGmGkcnd48RiYMwJfeuBBk158Vp4oCug/exec";
-const STORAGE_KEY = "hmipv_historico";
-const ALERT_PCT = 90, WARN_PCT = 80, LOW_PCT = 50;
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// CLOCK
+const firebaseConfig = {
+  apiKey: "AIzaSyAeQ-9ovCv3e_Abft600SdPd9q2FDumQk8",
+  authDomain: "dashboard-hmipv.firebaseapp.com",
+  projectId: "dashboard-hmipv",
+  storageBucket: "dashboard-hmipv.firebasestorage.app",
+  messagingSenderId: "1033421743279",
+  appId: "1:1033421743279:web:02ef51aff813612094205a"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+const COL = "snapshots";
+const ADMIN_PWD = "hmipv2026";
+const APPS_URL = "https://script.google.com/macros/s/AKfycby3CTu39_2qQbBWl7Ik4qShRtAmUwmVIKZVZALGmGkcnd48RiYMwJfeuBBk158Vp4oCug/exec";
+const ALERT_PCT=90, WARN_PCT=80, LOW_PCT=50;
+
+let allHistory = [];
+let CH = {};
+
+// ── CLOCK
 function updateClock() {
-  const n = new Date();
-  document.getElementById("clock").textContent = n.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-  document.getElementById("datestamp").textContent = n.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
+  const n=new Date();
+  document.getElementById("clock").textContent=n.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+  document.getElementById("datestamp").textContent=n.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
 }
-updateClock(); setInterval(updateClock, 1000);
+updateClock(); setInterval(updateClock,1000);
 
-// STORAGE
-function loadHistory() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]"); } catch { return []; } }
-function saveHistory(h) { localStorage.setItem(STORAGE_KEY, JSON.stringify(h)); }
-
-// HELPERS
-function getPct(u) { return u.leitos > 0 ? Math.round((u.pacientes/u.leitos)*100) : 0; }
-function pctColor(p) {
-  if (p > 100) return "#6B3FA0";
-  if (p >= ALERT_PCT) return "#C0392B";
-  if (p >= WARN_PCT)  return "#C77B1A";
-  if (p === 0)        return "#94A3B8";
-  if (p <= LOW_PCT)   return "#0E8A8A";
-  return "#1A8A5A";
+// ── HELPERS
+function getPct(u){return u.leitos>0?Math.round((u.pacientes/u.leitos)*100):0;}
+function pctColor(p){
+  if(p>100)return"#6B3FA0"; if(p===100)return"#C0392B";
+  if(p>=ALERT_PCT)return"#C0392B"; if(p>=WARN_PCT)return"#C77B1A";
+  if(p===0)return"#94A3B8"; if(p<=LOW_PCT)return"#0E8A8A";
+  return"#1A8A5A";
 }
-function getStatus(p) {
-  if (p > 100)        return { label:"SUPERLOTADO", cls:"bo" };
-  if (p >= ALERT_PCT) return { label:"CRÍTICO",     cls:"bc" };
-  if (p >= WARN_PCT)  return { label:"ATENÇÃO",     cls:"bw" };
-  if (p === 0)        return { label:"VAZIO",       cls:"bz" };
-  if (p <= LOW_PCT)   return { label:"BAIXA",       cls:"bl" };
-  return              { label:"NORMAL",             cls:"bn" };
+function getStatus(p){
+  if(p>100)return{label:"SUPERLOTADO",cls:"bo"};
+  if(p===100)return{label:"LOTADO",cls:"blot"};
+  if(p>=ALERT_PCT)return{label:"CRÍTICO",cls:"bc"};
+  if(p>=WARN_PCT)return{label:"ATENÇÃO",cls:"bw"};
+  if(p===0)return{label:"VAZIO",cls:"bz"};
+  if(p<=LOW_PCT)return{label:"BAIXA",cls:"bl"};
+  return{label:"NORMAL",cls:"bn"};
+}
+function destroyChart(id){if(CH[id]){CH[id].destroy();delete CH[id];}}
+
+// ── AUTH
+function isAdmin(){return sessionStorage.getItem("hmipv_admin")==="yes";}
+window.doLogin=function(){
+  const pwd=prompt("Senha de administrador:");
+  if(pwd===ADMIN_PWD){sessionStorage.setItem("hmipv_admin","yes");updateAdminUI();}
+  else alert("Senha incorreta.");
+};
+function updateAdminUI(){
+  document.getElementById("admin-btns").style.display=isAdmin()?"flex":"none";
+  document.getElementById("btn-login").style.display=isAdmin()?"none":"inline-flex";
 }
 
-// KPI HELPERS
-function calc7dAvg(history) {
-  if (history.length === 0) return null;
-  const now = new Date();
-  const cutoff = new Date(now - 7*24*60*60*1000);
-  const recent = history.filter(h => new Date(h.timestamp) >= cutoff);
-  if (recent.length === 0) return null;
-  const vals = recent.map(h => {
-    const t = h.units.reduce((a,u)=>a+u.leitos,0);
-    const p = h.units.reduce((a,u)=>a+u.pacientes,0);
-    return t > 0 ? (p/t)*100 : 0;
+// ── KPI HELPERS
+function calc7dAvg(h){
+  const cut=new Date(Date.now()-7*864e5);
+  const r=h.filter(x=>new Date(x.timestamp)>=cut);
+  if(!r.length)return null;
+  const v=r.map(x=>{const t=x.units.reduce((a,u)=>a+u.leitos,0);const p=x.units.reduce((a,u)=>a+u.pacientes,0);return t>0?(p/t)*100:0;});
+  return Math.round(v.reduce((a,x)=>a+x,0)/v.length);
+}
+function calcMonthAvg(h){
+  const ms=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+  const r=h.filter(x=>new Date(x.timestamp)>=ms);
+  if(!r.length)return null;
+  const v=r.map(x=>{const t=x.units.reduce((a,u)=>a+u.leitos,0);const p=x.units.reduce((a,u)=>a+u.pacientes,0);return t>0?(p/t)*100:0;});
+  return Math.round(v.reduce((a,x)=>a+x,0)/v.length);
+}
+function getDailyAvg(h){
+  const byDay={};
+  h.forEach(x=>{
+    const k=new Date(x.timestamp).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
+    const t=x.units.reduce((a,u)=>a+u.leitos,0);const p=x.units.reduce((a,u)=>a+u.pacientes,0);
+    if(!byDay[k])byDay[k]=[];byDay[k].push(t>0?(p/t)*100:0);
   });
-  return Math.round(vals.reduce((a,v)=>a+v,0)/vals.length);
-}
-function calcMonthAvg(history) {
-  if (history.length === 0) return null;
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const monthData = history.filter(h => new Date(h.timestamp) >= monthStart);
-  if (monthData.length === 0) return null;
-  const vals = monthData.map(h => {
-    const t = h.units.reduce((a,u)=>a+u.leitos,0);
-    const p = h.units.reduce((a,u)=>a+u.pacientes,0);
-    return t > 0 ? (p/t)*100 : 0;
-  });
-  return Math.round(vals.reduce((a,v)=>a+v,0)/vals.length);
+  const labels=Object.keys(byDay);
+  return{labels,data:labels.map(k=>Math.round(byDay[k].reduce((a,v)=>a+v,0)/byDay[k].length)),counts:labels.map(k=>byDay[k].length)};
 }
 
-// FETCH
-async function fetchData() {
-  const btn = document.getElementById("btn-fetch");
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Buscando...';
+// ── RENDER
+function renderAll(snap,history){
+  const {units}=snap;
+  const tL=units.reduce((a,u)=>a+u.leitos,0);
+  const tP=units.reduce((a,u)=>a+u.pacientes,0);
+  const pG=tL>0?Math.round((tP/tL)*100):0;
+  const crit=units.filter(u=>getPct(u)>=ALERT_PCT);
+  const avg7=calc7dAvg(history), avgM=calcMonthAvg(history);
 
-  const knownUnits = [
-    {name:"Sala de Observação Pediátrica - SOP",leitos:12,pacientes:7},
-    {name:"Pediatria",leitos:15,pacientes:16},
-    {name:"Canguru",leitos:5,pacientes:0},
-    {name:"Alojamento Conjunto",leitos:20,pacientes:18},
-    {name:"Alojamento Conjunto RN",leitos:20,pacientes:19},
-    {name:"Centro Obstétrico",leitos:8,pacientes:5},
-    {name:"Sala de Recuperação",leitos:9,pacientes:0},
-    {name:"Patologia Gestante",leitos:9,pacientes:7},
-    {name:"Psiquiatria Adolescente",leitos:6,pacientes:5},
-    {name:"Psiquiatria Geral",leitos:13,pacientes:11},
-    {name:"Psiquiatria Gestantes",leitos:5,pacientes:5},
-    {name:"UTI Neonatal",leitos:20,pacientes:18},
-    {name:"UCI Neonatal",leitos:15,pacientes:11},
-    {name:"UTI Pediátrica",leitos:10,pacientes:5},
-  ];
+  document.getElementById("kpi-pct").textContent=pG+"%";
+  document.getElementById("kpi-pct").style.color=pctColor(pG);
+  document.getElementById("kpi-pct-sub").textContent=`${tP} pacientes de ${tL} leitos`;
+  document.getElementById("kpi-avail") && (document.getElementById("kpi-avail").textContent=tL-tP);
+  document.getElementById("kpi-crit").textContent=crit.length;
+  document.getElementById("kpi-7d").textContent=avg7!==null?avg7+"%":"—";
+  if(avg7!==null)document.getElementById("kpi-7d").style.color=pctColor(avg7);
+  document.getElementById("kpi-7d-sub").textContent=avg7!==null?`${history.filter(h=>new Date(h.timestamp)>=new Date(Date.now()-7*864e5)).length} capturas nos últimos 7 dias`:"Sem dados suficientes";
+  document.getElementById("kpi-month").textContent=avgM!==null?avgM+"%":"—";
+  if(avgM!==null)document.getElementById("kpi-month").style.color=pctColor(avgM);
+  document.getElementById("kpi-month-sub").textContent=avgM!==null?`Média de ${new Date().toLocaleDateString("pt-BR",{month:"long"})}`:`Sem dados de ${new Date().toLocaleDateString("pt-BR",{month:"long"})}`;
+  document.getElementById("ts-pill").textContent="Atualizado: "+snap.sourceDate;
+  document.getElementById("hist-count-pill").textContent=`${history.length} registros`;
 
-  let units = [], fetchedLive = false, sourceDate = new Date().toLocaleString("pt-BR");
+  const banner=document.getElementById("alert-banner");
+  if(crit.length>0){banner.classList.add("show");document.getElementById("alert-text").textContent=" "+crit.map(u=>`${u.name} (${getPct(u)}%)`).join(" • ");}
+  else banner.classList.remove("show");
 
-  try {
-    const resp = await Promise.race([
-      fetch(APPS_SCRIPT_URL),
-      new Promise((_,rej) => setTimeout(()=>rej(new Error("timeout")),10000))
-    ]);
-    if (resp.ok) {
-      const data = await resp.json();
-      const rows = data.resumo || data;
-      const parsed = [];
-      for (let i = 5; i <= 18 && i < rows.length; i++) {
-        const row = rows[i];
-        const name = String(row[0]||"").trim();
-        const leitos = parseInt(row[1]);
-        const pacientes = parseInt(row[2]);
-        if (name.length > 1 && !isNaN(leitos) && leitos > 0) {
-          parsed.push({name, leitos, pacientes: isNaN(pacientes) ? 0 : pacientes});
-        }
-      }
-      if (rows[2] && rows[2][1]) { try { sourceDate = new Date(rows[2][1]).toLocaleString("pt-BR"); } catch {} }
-      if (parsed.length >= 3) { units = parsed; fetchedLive = true; }
-    }
-  } catch(e) {}
-
-  if (!fetchedLive) {
-    const hist = loadHistory();
-    if (hist.length > 0) { units = hist[hist.length-1].units; }
-    else { units = knownUnits.map(u=>({...u})); }
-  }
-
-  const snapshot = { timestamp: new Date().toISOString(), sourceDate, fetchedLive, units };
-  const history = loadHistory();
-  history.push(snapshot);
-  if (history.length > 500) history.shift();
-  saveHistory(history);
-
-  renderDashboard(snapshot, history);
-  renderHistory(history);
-
-  btn.disabled = false;
-  btn.innerHTML = "📥 Capturar Dados";
-  const ts = new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-  document.getElementById("update-info").innerHTML = fetchedLive
-    ? `✅ Dados ao vivo capturados às <b>${ts}</b> — Prefeitura atualizou em: <b>${sourceDate}</b>`
-    : `⚠️ Usando último snapshot (${ts}) — conexão com planilha indisponível`;
-  // Reinicia contagem regressiva após captura manual
-  startCountdown();
-}
-
-// RENDER
-let barChartInst = null, lineChartInst = null;
-
-function renderDashboard(snap, history) {
-  const { units } = snap;
-  const totalLeitos = units.reduce((a,u)=>a+u.leitos,0);
-  const totalPac    = units.reduce((a,u)=>a+u.pacientes,0);
-  const pctGeral    = totalLeitos > 0 ? Math.round((totalPac/totalLeitos)*100) : 0;
-  const available   = totalLeitos - totalPac;
-  const critCount   = units.filter(u=>getPct(u)>=ALERT_PCT).length;
-  const avg7d       = calc7dAvg(history);
-  const avgMonth    = calcMonthAvg(history);
-
-  // KPIs
-  document.getElementById("kpi-pct").textContent    = pctGeral + "%";
-  document.getElementById("kpi-pct-sub").textContent = `${totalPac} pacientes de ${totalLeitos} leitos`;
-  document.getElementById("kpi-7d").textContent      = avg7d !== null ? avg7d + "%" : "—";
-  document.getElementById("kpi-7d-sub").textContent  = avg7d !== null ? `Baseado em ${history.filter(h=>new Date(h.timestamp)>=new Date(Date.now()-7*864e5)).length} capturas` : "Sem capturas nos últimos 7 dias";
-  document.getElementById("kpi-month").textContent   = avgMonth !== null ? avgMonth + "%" : "—";
-  const mn = new Date().toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
-  document.getElementById("kpi-month-sub").textContent = avgMonth !== null ? `Média de ${new Date().toLocaleDateString("pt-BR",{month:"long"})}` : `Sem dados de ${new Date().toLocaleDateString("pt-BR",{month:"long"})}`;
-  document.getElementById("kpi-crit").textContent    = critCount;
-  document.getElementById("ts-pill").textContent     = "Atualizado: " + snap.sourceDate;
-  document.getElementById("hist-count-pill").textContent = `${history.length} registros`;
-
-  // Alert
-  const critUnits = units.filter(u=>getPct(u)>=ALERT_PCT);
-  const banner = document.getElementById("alert-banner");
-  if (critUnits.length > 0) {
-    banner.classList.add("show");
-    document.getElementById("alert-text").textContent = " " + critUnits.map(u=>`${u.name} (${getPct(u)}%)`).join(" • ");
-  } else { banner.classList.remove("show"); }
-
-  // UNIT CARDS
-  const grid = document.getElementById("units-grid");
-  grid.innerHTML = units.map(u => {
-    const p = getPct(u), col = pctColor(p), st = getStatus(p);
-    const avail = u.leitos - u.pacientes;
-    const safeName = u.name.replace(/'/g, "\'");
-    return `<div class="unit-card" style="--uc-color:${col};cursor:pointer" onclick="openUnitModal('${safeName}')" title="Clique para ver histórico detalhado">
+  const sorted=[...units].sort((a,b)=>getPct(b)-getPct(a));
+  document.getElementById("units-grid").innerHTML=sorted.map(u=>{
+    const p=getPct(u),col=pctColor(p),st=getStatus(p),av=u.leitos-u.pacientes;
+    const sn=u.name.replace(/'/g,"\\'");
+    return `<div class="unit-card" style="--uc-color:${col};cursor:pointer" onclick="openUnitModal('${sn}')" title="Clique para ver histórico">
       <div class="uc-name">${u.name}</div>
-      <div class="uc-gauge">
-        <div class="uc-pct" style="color:${col}">${p}%</div>
-        <div class="uc-counts">
-          <div><b style="color:${col}">${u.pacientes}</b> pacientes</div>
-          <div>${u.leitos} leitos</div>
-        </div>
-      </div>
+      <div class="uc-gauge"><div class="uc-pct" style="color:${col}">${p}%</div>
+      <div class="uc-counts"><div><b style="color:${col}">${u.pacientes}</b> pacientes</div><div>${u.leitos} leitos</div></div></div>
       <div class="uc-bar-bg"><div class="uc-bar-fill" style="width:${Math.min(p,100)}%;background:${col}"></div></div>
-      <div class="uc-footer">
-        <div class="uc-avail">Disponíveis: <b>${avail}</b></div>
-        <span class="badge ${st.cls}">${st.label}</span>
-      </div>
+      <div class="uc-footer"><div class="uc-avail">Disponíveis: <b>${av}</b></div><span class="badge ${st.cls}">${st.label}</span></div>
     </div>`;
   }).join("");
 
-  // TABLE
-  document.getElementById("units-tbody").innerHTML = units.map(u => {
-    const p = getPct(u), col = pctColor(p), st = getStatus(p);
-    return `<tr>
-      <td><b>${u.name}</b></td>
-      <td>${u.leitos}</td>
-      <td>${u.pacientes}</td>
-      <td>
-        <div class="pct-wrap">
-          <div class="pct-bg"><div class="pct-fill" style="width:${Math.min(p,100)}%;background:${col}"></div></div>
-          <span style="font-weight:700;color:${col};min-width:40px">${p}%</span>
-        </div>
-      </td>
-      <td><span class="badge ${st.cls}">${st.label}</span></td>
-    </tr>`;
+  document.getElementById("units-tbody").innerHTML=sorted.map(u=>{
+    const p=getPct(u),col=pctColor(p),st=getStatus(p);
+    return `<tr><td><b>${u.name}</b></td><td>${u.leitos}</td><td>${u.pacientes}</td>
+      <td><div class="pct-wrap"><div class="pct-bg"><div class="pct-fill" style="width:${Math.min(p,100)}%;background:${col}"></div></div><span style="font-weight:700;color:${col};min-width:40px">${p}%</span></div></td>
+      <td><span class="badge ${st.cls}">${st.label}</span></td></tr>`;
   }).join("");
 
-  // BAR CHART
-  if (barChartInst) barChartInst.destroy();
-  barChartInst = new Chart(document.getElementById("barChart").getContext("2d"), {
-    type: "bar",
-    data: {
-      labels: units.map(u=>u.name.length>16?u.name.substring(0,15)+"…":u.name),
-      datasets: [{
-        label:"% Ocupação",
-        data: units.map(u=>getPct(u)),
-        backgroundColor: units.map(u=>pctColor(getPct(u))+"CC"),
-        borderColor: units.map(u=>pctColor(getPct(u))),
-        borderWidth:1.5, borderRadius:5
-      }]
-    },
-    options: {
-      responsive:true,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed.y}%`}}},
-      scales:{
-        y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#F1F5F9"}},
-        x:{ticks:{font:{size:9},maxRotation:45},grid:{display:false}}
-      }
-    }
+  destroyChart("barChart");
+  CH.barChart=new Chart(document.getElementById("barChart").getContext("2d"),{
+    type:"bar",data:{labels:sorted.map(u=>u.name.length>22?u.name.substring(0,20)+"…":u.name),
+      datasets:[{label:"% Ocupação",data:sorted.map(u=>getPct(u)),
+        backgroundColor:sorted.map(u=>pctColor(getPct(u))+"CC"),
+        borderColor:sorted.map(u=>pctColor(getPct(u))),borderWidth:1.5,borderRadius:4}]},
+    options:{indexAxis:"y",responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed.x}% — ${sorted[c.dataIndex].pacientes} de ${sorted[c.dataIndex].leitos} leitos`}}},
+      scales:{x:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#F1F5F9"}},y:{ticks:{font:{size:10}},grid:{display:false}}}}
   });
 
   renderLineChart(history);
 }
 
-function getDailyAverages(history) {
-  // Group snapshots by day and calculate daily average
-  const byDay = {};
-  history.forEach(h => {
-    const d = new Date(h.timestamp);
-    const key = d.toLocaleDateString("pt-BR", {day:"2-digit",month:"2-digit",year:"numeric"});
-    const t = h.units.reduce((a,u)=>a+u.leitos,0);
-    const p = h.units.reduce((a,u)=>a+u.pacientes,0);
-    const pct = t > 0 ? (p/t)*100 : 0;
-    if (!byDay[key]) byDay[key] = [];
-    byDay[key].push(pct);
-  });
-  const labels = Object.keys(byDay);
-  const data = labels.map(k => Math.round(byDay[k].reduce((a,v)=>a+v,0)/byDay[k].length));
-  return { labels, data, counts: labels.map(k=>byDay[k].length) };
-}
-
-function renderLineChart(history) {
-  if (lineChartInst) lineChartInst.destroy();
-  if (history.length === 0) return;
-  const { labels, data, counts } = getDailyAverages(history);
-  lineChartInst = new Chart(document.getElementById("lineChart").getContext("2d"), {
-    type:"line",
-    data:{
-      labels,
-      datasets:[{
-        label:"Média Diária",
-        data,
-        borderColor:"#1A6FBF",backgroundColor:"rgba(26,111,191,0.08)",
-        borderWidth:2.5,pointRadius:labels.length>30?0:4,
-        pointBackgroundColor:"#1A6FBF",fill:true,tension:0.4
-      }]
-    },
-    options:{
-      responsive:true,
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{
-          label: (c) => ` Média: ${c.parsed.y}%`,
-          afterLabel: (c) => ` (${counts[c.dataIndex]} captura${counts[c.dataIndex]>1?"s":""})`
-        }}
-      },
-      scales:{
-        y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#F1F5F9"}},
-        x:{ticks:{font:{size:9},maxRotation:45,maxTicksLimit:15},grid:{display:false}}
-      }
-    }
+function renderLineChart(history){
+  destroyChart("lineChart");
+  if(!history.length)return;
+  const {labels,data,counts}=getDailyAvg(history);
+  CH.lineChart=new Chart(document.getElementById("lineChart").getContext("2d"),{
+    type:"line",data:{labels,datasets:[{label:"Média Diária",data,borderColor:"#1A6FBF",
+      backgroundColor:"rgba(26,111,191,0.08)",borderWidth:2.5,
+      pointRadius:labels.length>30?0:4,pointBackgroundColor:"#1A6FBF",fill:true,tension:0.4}]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{
+      label:c=>` Média: ${c.parsed.y}%`,afterLabel:c=>` (${counts[c.dataIndex]} captura${counts[c.dataIndex]>1?"s":""})`}}},
+      scales:{y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#F1F5F9"}},
+        x:{ticks:{font:{size:9},maxRotation:45,maxTicksLimit:15},grid:{display:false}}}}
   });
 }
 
-function renderHistory(history) {
-  document.getElementById("hist-count-pill").textContent = `${history.length} registros`;
-  const container = document.getElementById("history-container");
-  if (history.length === 0) {
-    container.innerHTML = `<div class="empty-state"><div class="icon">🗂</div>Nenhuma captura salva ainda.</div>`;
-    return;
-  }
-  const reversed = [...history].reverse().slice(0,50);
-  container.innerHTML = `<table class="history-table">
-    <thead><tr>
-      <th>Data / Hora</th><th>Ocupação Geral</th><th>Pacientes</th>
-      <th>Leitos</th><th>Disponíveis</th><th>Unidades Críticas</th><th>Fonte</th>
-    </tr></thead>
-    <tbody>
-      ${reversed.map(h => {
-        const tot = h.units.reduce((a,u)=>a+u.leitos,0);
-        const pac = h.units.reduce((a,u)=>a+u.pacientes,0);
-        const pct = tot>0?Math.round((pac/tot)*100):0;
-        const crit = h.units.filter(u=>getPct(u)>=ALERT_PCT).length;
-        const d = new Date(h.timestamp);
-        const ds = d.toLocaleDateString("pt-BR")+" "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-        return `<tr>
-          <td><b>${ds}</b></td>
-          <td><b style="color:${pctColor(pct)}">${pct}%</b></td>
-          <td>${pac}</td><td>${tot}</td><td>${tot-pac}</td>
-          <td>${crit>0?`<span style="color:var(--red);font-weight:600">${crit}</span>`:`<span style="color:var(--green)">0</span>`}</td>
-          <td><span class="badge ${h.fetchedLive?'bn':'bw'}">${h.fetchedLive?'AO VIVO':'SNAPSHOT'}</span></td>
-        </tr>`;
-      }).join("")}
-    </tbody>
-  </table>
+function renderHistory(history){
+  document.getElementById("hist-count-pill").textContent=`${history.length} registros`;
+  const c=document.getElementById("history-container");
+  if(!history.length){c.innerHTML='<div class="empty-state"><div class="icon">🗂</div>Nenhuma captura salva ainda.</div>';return;}
+  const rev=[...history].reverse().slice(0,50);
+  c.innerHTML=`<table class="history-table"><thead><tr><th>Data/Hora</th><th>Ocupação</th><th>Pacientes</th><th>Leitos</th><th>Disponíveis</th><th>Críticas</th><th>Fonte</th></tr></thead><tbody>
+    ${rev.map(h=>{
+      const t=h.units.reduce((a,u)=>a+u.leitos,0),p=h.units.reduce((a,u)=>a+u.pacientes,0);
+      const pct=t>0?Math.round((p/t)*100):0,crit=h.units.filter(u=>getPct(u)>=ALERT_PCT).length;
+      const d=new Date(h.timestamp);
+      return`<tr><td><b>${d.toLocaleDateString("pt-BR")} ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</b></td>
+        <td><b style="color:${pctColor(pct)}">${pct}%</b></td><td>${p}</td><td>${t}</td><td>${t-p}</td>
+        <td>${crit>0?`<span style="color:#C0392B;font-weight:600">${crit}</span>`:'<span style="color:#1A8A5A">0</span>'}</td>
+        <td><span class="badge ${h.fetchedLive?"bn":"bw"}">${h.fetchedLive?"AO VIVO":"SNAPSHOT"}</span></td></tr>`;
+    }).join("")}
+  </tbody></table>
   ${history.length>50?`<div style="text-align:center;padding:10px;font-size:11px;color:#94A3B8">Mostrando 50 de ${history.length} registros</div>`:""}`;
 }
 
-function clearHistory() {
-  if (!confirm("Apagar todo o histórico? Esta ação não pode ser desfeita.")) return;
-  localStorage.removeItem(STORAGE_KEY);
-  renderHistory([]);
-  if (lineChartInst) { lineChartInst.destroy(); lineChartInst = null; }
-  document.getElementById("kpi-7d").textContent = "—";
-  document.getElementById("kpi-month").textContent = "—";
-  document.getElementById("update-info").innerHTML = 'Histórico apagado. Clique em <b>Capturar Dados</b> para recomeçar.';
+window.toggleHistory=function(){
+  const c=document.getElementById("history-container"),b=document.getElementById("toggle-hist-btn");
+  const h=c.style.display==="none";c.style.display=h?"block":"none";b.textContent=h?"▲ Ocultar":"▼ Mostrar";
+};
+
+// ── FIREBASE OPS
+window.clearHistory=async function(){
+  if(!isAdmin()){doLogin();return;}
+  if(!confirm("Apagar todo o histórico?"))return;
+  try{
+    const snap=await getDocs(collection(db,COL));
+    await Promise.all(snap.docs.map(d=>deleteDoc(doc(db,COL,d.id))));
+    allHistory=[];renderHistory([]);renderLineChart([]);
+    document.getElementById("update-info").innerHTML="Histórico apagado.";
+  }catch(e){alert("Erro ao apagar.");}
+};
+
+window.fetchData=async function(){
+  if(!isAdmin()){doLogin();return;}
+  const btn=document.getElementById("btn-fetch");
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Buscando...';
+  let units=[],live=false,sd=new Date().toLocaleString("pt-BR");
+  try{
+    const resp=await Promise.race([fetch(APPS_URL),new Promise((_,r)=>setTimeout(()=>r(new Error),12000))]);
+    if(resp.ok){
+      const data=await resp.json();const rows=data.resumo||data;const parsed=[];
+      for(let i=5;i<=18&&i<rows.length;i++){
+        const row=rows[i],name=String(row[0]||"").trim(),leitos=parseInt(row[1]),pacientes=parseInt(row[2]);
+        if(name.length>1&&!isNaN(leitos)&&leitos>0)parsed.push({name,leitos,pacientes:isNaN(pacientes)?0:pacientes});
+      }
+      if(rows[2]&&rows[2][1]){try{sd=new Date(rows[2][1]).toLocaleString("pt-BR");}catch{}}
+      if(parsed.length>=3){units=parsed;live=true;}
+    }
+  }catch(e){}
+  if(!live&&allHistory.length>0)units=allHistory[allHistory.length-1].units;
+  if(!units.length){document.getElementById("update-info").innerHTML="⚠️ Não foi possível carregar dados.";btn.disabled=false;btn.innerHTML="📥 Capturar Dados";return;}
+  const snap={timestamp:new Date().toISOString(),sourceDate:sd,fetchedLive:live,units};
+  await addDoc(collection(db,COL),snap);
+  btn.disabled=false;btn.innerHTML="📥 Capturar Dados";
+  const ts=new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+  document.getElementById("update-info").innerHTML=live?`✅ Dados ao vivo capturados às <b>${ts}</b> — Central atualizou em: <b>${sd}</b>`:`⚠️ Usando último snapshot (${ts})`;
+  startCountdown();
+};
+
+// ── AUTO REFRESH
+let secLeft=3600,cdTimer=null,arTimer=null;
+function startCountdown(){
+  secLeft=3600;if(cdTimer)clearInterval(cdTimer);
+  cdTimer=setInterval(()=>{
+    secLeft--;if(secLeft<=0)secLeft=3600;
+    const el=document.getElementById("countdown");
+    if(el)el.textContent=`${String(Math.floor(secLeft/60)).padStart(2,"0")}:${String(secLeft%60).padStart(2,"0")}`;
+  },1000);
 }
-
-// AUTO REFRESH — a cada 1 hora
-const AUTO_INTERVAL_MS = 60 * 60 * 1000; // 1 hora
-let secondsLeft = 60 * 60;
-let countdownTimer = null;
-let autoRefreshTimer = null;
-
-function startCountdown() {
-  secondsLeft = AUTO_INTERVAL_MS / 1000;
-  if (countdownTimer) clearInterval(countdownTimer);
-  countdownTimer = setInterval(() => {
-    secondsLeft--;
-    if (secondsLeft <= 0) secondsLeft = AUTO_INTERVAL_MS / 1000;
-    const m = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
-    const s = String(secondsLeft % 60).padStart(2, "0");
-    const el = document.getElementById("countdown");
-    if (el) el.textContent = `${m}:${s}`;
-  }, 1000);
-}
-
-function startAutoRefresh() {
-  if (autoRefreshTimer) clearInterval(autoRefreshTimer);
-  autoRefreshTimer = setInterval(() => {
-    fetchData();
-    startCountdown();
-  }, AUTO_INTERVAL_MS);
+function startAutoRefresh(){
+  if(arTimer)clearInterval(arTimer);
+  arTimer=setInterval(()=>{if(isAdmin())window.fetchData();},3600000);
   startCountdown();
 }
 
-// INIT
-(function init() {
-  const history = loadHistory();
-  renderHistory(history);
-  renderLineChart(history);
-  if (history.length > 0) {
-    const last = history[history.length-1];
-    renderDashboard(last, history);
-    const d = new Date(last.timestamp);
-    document.getElementById("update-info").innerHTML =
-      `Última captura: <b>${d.toLocaleDateString("pt-BR")} às ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</b> — Próxima atualização automática em <b id="countdown">60:00</b>`;
+// ── MODAL
+let mL=null,mD=null,mB=null;
+window.openUnitModal=function(unitName){
+  const history=allHistory;
+  const modal=document.getElementById("unit-modal");
+  const cu=history.length>0?history[history.length-1].units.find(u=>u.name===unitName):null;
+  const uh=history.filter(h=>h.units.find(u=>u.name===unitName)).map(h=>{const u=h.units.find(u=>u.name===unitName);return{timestamp:h.timestamp,leitos:u.leitos,pacientes:u.pacientes,pct:u.leitos>0?Math.round((u.pacientes/u.leitos)*100):0};});
+  document.getElementById("modal-title").textContent=unitName;
+  document.getElementById("modal-sub").textContent=`${uh.length} registros · HMIPV`;
+  if(cu){const p=getPct(cu),col=pctColor(p);document.getElementById("m-atual").textContent=p+"%";document.getElementById("m-atual").style.color=col;document.getElementById("m-atual-sub").textContent=`${cu.pacientes} de ${cu.leitos} leitos`;document.getElementById("m-leitos").textContent=cu.leitos;document.getElementById("m-avail").textContent=cu.leitos-cu.pacientes;}
+  const cut7=new Date(Date.now()-7*864e5),l7=uh.filter(h=>new Date(h.timestamp)>=cut7);
+  if(l7.length){const a=Math.round(l7.reduce((s,h)=>s+h.pct,0)/l7.length);document.getElementById("m-7d").textContent=a+"%";document.getElementById("m-7d").style.color=pctColor(a);document.getElementById("m-7d-sub").textContent=`${l7.length} capturas`;}
+  else{document.getElementById("m-7d").textContent="—";document.getElementById("m-7d-sub").textContent="Sem dados";}
+  const ms=new Date(new Date().getFullYear(),new Date().getMonth(),1),tm=uh.filter(h=>new Date(h.timestamp)>=ms);
+  if(tm.length){const a=Math.round(tm.reduce((s,h)=>s+h.pct,0)/tm.length);document.getElementById("m-mes").textContent=a+"%";document.getElementById("m-mes").style.color=pctColor(a);document.getElementById("m-mes-sub").textContent=new Date().toLocaleDateString("pt-BR",{month:"long",year:"numeric"});}
+  else{document.getElementById("m-mes").textContent="—";document.getElementById("m-mes-sub").textContent="Sem dados";}
+  if(uh.length){const pk=uh.reduce((a,h)=>h.pct>a.pct?h:a,uh[0]);document.getElementById("m-pico").textContent=pk.pct+"%";document.getElementById("m-pico").style.color=pctColor(pk.pct);document.getElementById("m-pico-sub").textContent=new Date(pk.timestamp).toLocaleDateString("pt-BR");}
+  if(mL)mL.destroy();if(mD)mD.destroy();if(mB)mB.destroy();
+  if(uh.length){
+    const ud=(()=>{const bd={};uh.forEach(h=>{const k=new Date(h.timestamp).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});if(!bd[k])bd[k]=[];bd[k].push(h.pct)});const l=Object.keys(bd);return{lbls:l,vals:l.map(k=>Math.round(bd[k].reduce((a,v)=>a+v,0)/bd[k].length)),cnts:l.map(k=>bd[k].length)}})();
+    mL=new Chart(document.getElementById("m-line-chart").getContext("2d"),{type:"line",data:{labels:ud.lbls,datasets:[{label:"Média",data:ud.vals,borderColor:"#1A6FBF",backgroundColor:"rgba(26,111,191,0.08)",borderWidth:2.5,pointRadius:ud.lbls.length>30?0:4,fill:true,tension:0.4}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` Média: ${c.parsed.y}%`,afterLabel:c=>` (${ud.cnts[c.dataIndex]} capturas)`}}},scales:{y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#E2E8F0"}},x:{ticks:{font:{size:9},maxRotation:45,maxTicksLimit:15},grid:{display:false}}}}});
+    const vz=uh.filter(h=>h.pct===0).length,bx=uh.filter(h=>h.pct>0&&h.pct<=LOW_PCT).length,nm=uh.filter(h=>h.pct>LOW_PCT&&h.pct<WARN_PCT).length,at=uh.filter(h=>h.pct>=WARN_PCT&&h.pct<ALERT_PCT).length,cr=uh.filter(h=>h.pct>=ALERT_PCT&&h.pct<=100).length,sp=uh.filter(h=>h.pct>100).length;
+    mD=new Chart(document.getElementById("m-donut-chart").getContext("2d"),{type:"doughnut",data:{labels:["Vazio","Baixa","Normal","Atenção","Crítico","Superlotado"],datasets:[{data:[vz,bx,nm,at,cr,sp],backgroundColor:["#94A3B8","#0E8A8A","#1A8A5A","#C77B1A","#C0392B","#6B3FA0"],borderWidth:2,borderColor:"#fff",hoverOffset:6}]},options:{responsive:true,cutout:"60%",plugins:{legend:{position:"bottom",labels:{font:{size:10},boxWidth:10}},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed} capturas`}}}}});
+    const wd=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);wd.push(d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"}));}
+    const wv=wd.map(day=>{const s=uh.filter(h=>new Date(h.timestamp).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"})===day);return s.length?Math.round(s.reduce((a,h)=>a+h.pct,0)/s.length):null;});
+    mB=new Chart(document.getElementById("m-bar-chart").getContext("2d"),{type:"line",data:{labels:wd.map(d=>d.substring(0,5)),datasets:[{label:"Média",data:wv,borderColor:"#1A6FBF",backgroundColor:"rgba(26,111,191,0.08)",borderWidth:2.5,pointRadius:5,pointBackgroundColor:wv.map(v=>v===null?"transparent":pctColor(v)),fill:true,tension:0.4,spanGaps:true}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y!==null?` Média: ${c.parsed.y}%`:" Sem dados"}}},scales:{y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#E2E8F0"}},x:{ticks:{font:{size:10}},grid:{display:false}}}}});
   }
-  startAutoRefresh();
-})();
+  const mhc=document.getElementById("modal-hist-container"),mhb=document.getElementById("modal-hist-btn");
+  if(uh.length){const rev=[...uh].reverse().slice(0,30);document.getElementById("modal-hist-container").innerHTML=`<table class="modal-hist-table"><thead><tr><th>Data/Hora</th><th>% Ocup.</th><th>Pacientes</th><th>Leitos</th><th>Disponíveis</th><th>Status</th></tr></thead><tbody>${rev.map(h=>{const st=getStatus(h.pct);const d=new Date(h.timestamp);return`<tr><td><b>${d.toLocaleDateString("pt-BR")} ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</b></td><td><b style="color:${pctColor(h.pct)}">${h.pct}%</b></td><td>${h.pacientes}</td><td>${h.leitos}</td><td>${h.leitos-h.pacientes}</td><td><span class="badge ${st.cls}">${st.label}</span></td></tr>`;}).join("")}</tbody></table>`; }
+  else document.getElementById("modal-hist-container").innerHTML='<div class="modal-empty">Sem histórico.</div>';
+  if(mhc)mhc.style.display="none";if(mhb)mhb.textContent="▼ MOSTRAR";
+  modal.classList.add("open");document.body.style.overflow="hidden";
+};
+window.toggleModalHist=function(){const c=document.getElementById("modal-hist-container"),b=document.getElementById("modal-hist-btn");const h=c.style.display==="none";c.style.display=h?"block":"none";b.textContent=h?"▲ OCULTAR":"▼ MOSTRAR";};
+window.closeModal=function(e){if(e.target===document.getElementById("unit-modal"))closeModalBtn();};
+window.closeModalBtn=function(){document.getElementById("unit-modal").classList.remove("open");document.body.style.overflow="";};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")window.closeModalBtn();});
 
-// ── MODAL ────────────────────────────────────────────────────
-let mLineChart = null, mDonutChart = null, mBarChart = null;
-
-function openUnitModal(unitName) {
-  const history = loadHistory();
-  const modal = document.getElementById("unit-modal");
-
-  // Get current data for this unit
-  let currentUnit = null;
-  if (history.length > 0) {
-    const last = history[history.length-1];
-    currentUnit = last.units.find(u => u.name === unitName);
-  }
-
-  // Build unit history across all snapshots
-  const unitHistory = history
-    .filter(h => h.units.find(u => u.name === unitName))
-    .map(h => {
-      const u = h.units.find(u => u.name === unitName);
-      const p = u.leitos > 0 ? Math.round((u.pacientes/u.leitos)*100) : 0;
-      return { timestamp: h.timestamp, leitos: u.leitos, pacientes: u.pacientes, pct: p };
-    });
-
-  // Title
-  document.getElementById("modal-title").textContent = unitName;
-  document.getElementById("modal-sub").textContent =
-    unitHistory.length > 0 ? `${unitHistory.length} registros históricos · HMIPV` : "Sem histórico · HMIPV";
-
-  // Current KPIs
-  if (currentUnit) {
-    const p = getPct(currentUnit);
-    const col = pctColor(p);
-    document.getElementById("m-atual").textContent = p + "%";
-    document.getElementById("m-atual").style.color = col;
-    document.getElementById("m-atual-sub").textContent = `${currentUnit.pacientes} de ${currentUnit.leitos} leitos`;
-    document.getElementById("m-leitos").textContent = currentUnit.leitos;
-    document.getElementById("m-avail").textContent = currentUnit.leitos - currentUnit.pacientes;
-    document.getElementById("m-avail-sub").textContent = `leitos livres agora`;
-  } else {
-    ["m-atual","m-leitos","m-avail"].forEach(id => document.getElementById(id).textContent = "—");
-  }
-
-  // 7-day average for unit
-  const now = new Date();
-  const cutoff7 = new Date(now - 7*24*60*60*1000);
-  const last7 = unitHistory.filter(h => new Date(h.timestamp) >= cutoff7);
-  if (last7.length > 0) {
-    const avg = Math.round(last7.reduce((a,h)=>a+h.pct,0)/last7.length);
-    document.getElementById("m-7d").textContent = avg + "%";
-    document.getElementById("m-7d").style.color = pctColor(avg);
-    document.getElementById("m-7d-sub").textContent = `${last7.length} capturas nos últimos 7 dias`;
-  } else {
-    document.getElementById("m-7d").textContent = "—";
-    document.getElementById("m-7d-sub").textContent = "Sem capturas nos últimos 7 dias";
-  }
-
-  // Month average for unit
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const thisMonth = unitHistory.filter(h => new Date(h.timestamp) >= monthStart);
-  if (thisMonth.length > 0) {
-    const avg = Math.round(thisMonth.reduce((a,h)=>a+h.pct,0)/thisMonth.length);
-    document.getElementById("m-mes").textContent = avg + "%";
-    document.getElementById("m-mes").style.color = pctColor(avg);
-    document.getElementById("m-mes-sub").textContent = now.toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
-  } else {
-    document.getElementById("m-mes").textContent = "—";
-    document.getElementById("m-mes-sub").textContent = "Sem dados do mês";
-  }
-
-  // Peak
-  if (unitHistory.length > 0) {
-    const peak = unitHistory.reduce((a,h) => h.pct > a.pct ? h : a, unitHistory[0]);
-    document.getElementById("m-pico").textContent = peak.pct + "%";
-    document.getElementById("m-pico").style.color = pctColor(peak.pct);
-    document.getElementById("m-pico-sub").textContent = new Date(peak.timestamp).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
-  } else {
-    document.getElementById("m-pico").textContent = "—";
-  }
-
-  // Charts
-  if (mLineChart) mLineChart.destroy();
-  if (mDonutChart) mDonutChart.destroy();
-  if (mBarChart) mBarChart.destroy();
-
-  if (unitHistory.length > 0) {
-    // Line chart — daily average for unit
-    const unitDailyAvg = (function() {
-      const byDay = {};
-      unitHistory.forEach(h => {
-        const d = new Date(h.timestamp);
-        const key = d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
-        if (!byDay[key]) byDay[key] = [];
-        byDay[key].push(h.pct);
-      });
-      const lbls = Object.keys(byDay);
-      const vals = lbls.map(k=>Math.round(byDay[k].reduce((a,v)=>a+v,0)/byDay[k].length));
-      const cnts = lbls.map(k=>byDay[k].length);
-      return {lbls,vals,cnts};
-    })();
-    mLineChart = new Chart(document.getElementById("m-line-chart").getContext("2d"), {
-      type:"line",
-      data:{
-        labels: unitDailyAvg.lbls,
-        datasets:[{
-          label:"Média Diária",
-          data: unitDailyAvg.vals,
-          borderColor:"#1A6FBF", backgroundColor:"rgba(26,111,191,0.08)",
-          borderWidth:2.5, pointRadius:unitDailyAvg.lbls.length>30?0:4,
-          pointBackgroundColor:"#1A6FBF", fill:true, tension:0.4
-        }]
-      },
-      options:{responsive:true,
-        plugins:{legend:{display:false},tooltip:{callbacks:{
-          label:c=>` Média: ${c.parsed.y}%`,
-          afterLabel:c=>` (${unitDailyAvg.cnts[c.dataIndex]} captura${unitDailyAvg.cnts[c.dataIndex]>1?"s":""})`
-        }}},
-        scales:{y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#E2E8F0"}},
-          x:{ticks:{font:{size:9},maxRotation:45,maxTicksLimit:15},grid:{display:false}}}}
-    });
-
-    // Donut — status distribution
-    const vazio   = unitHistory.filter(h=>h.pct===0).length;
-    const baixa   = unitHistory.filter(h=>h.pct>0&&h.pct<=LOW_PCT).length;
-    const normal  = unitHistory.filter(h=>h.pct>LOW_PCT&&h.pct<WARN_PCT).length;
-    const atencao = unitHistory.filter(h=>h.pct>=WARN_PCT&&h.pct<ALERT_PCT).length;
-    const critico = unitHistory.filter(h=>h.pct>=ALERT_PCT&&h.pct<=100).length;
-    const super_  = unitHistory.filter(h=>h.pct>100).length;
-    mDonutChart = new Chart(document.getElementById("m-donut-chart").getContext("2d"), {
-      type:"doughnut",
-      data:{
-        labels:["Vazio","Baixa","Normal","Atenção","Crítico","Superlotado"],
-        datasets:[{data:[vazio,baixa,normal,atencao,critico,super_],
-          backgroundColor:["#94A3B8","#0E8A8A","#1A8A5A","#C77B1A","#C0392B","#6B3FA0"],
-          borderWidth:2,borderColor:"#fff",hoverOffset:6}]
-      },
-      options:{responsive:true,cutout:"60%",
-        plugins:{legend:{position:"bottom",labels:{font:{size:10},boxWidth:10}},
-          tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed} capturas`}}}}
-    });
-
-    // Bar — last 10
-    const last10 = unitHistory.slice(-10);
-    mBarChart = new Chart(document.getElementById("m-bar-chart").getContext("2d"), {
-      type:"bar",
-      data:{
-        labels: last10.map(h=>new Date(h.timestamp).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})),
-        datasets:[{
-          label:"% Ocupação",
-          data: last10.map(h=>h.pct),
-          backgroundColor: last10.map(h=>pctColor(h.pct)+"CC"),
-          borderColor: last10.map(h=>pctColor(h.pct)),
-          borderWidth:1.5, borderRadius:5
-        }]
-      },
-      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.parsed.y}%`}}},
-        scales:{y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#E2E8F0"}},
-          x:{ticks:{font:{size:9}},grid:{display:false}}}}
-    });
-  }
-
-  // History table
-  const histContainer = document.getElementById("modal-hist-container");
-  if (unitHistory.length === 0) {
-    histContainer.innerHTML = '<div class="modal-empty">Nenhum histórico disponível para esta unidade.</div>';
-  } else {
-    const rev = [...unitHistory].reverse().slice(0, 30);
-    histContainer.innerHTML = `<table class="modal-hist-table">
-      <thead><tr><th>Data / Hora</th><th>% Ocupação</th><th>Pacientes</th><th>Leitos</th><th>Disponíveis</th><th>Status</th></tr></thead>
-      <tbody>${rev.map(h=>{
-        const st = getStatus(h.pct);
-        const d = new Date(h.timestamp);
-        return `<tr>
-          <td><b>${d.toLocaleDateString("pt-BR")} ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</b></td>
-          <td><b style="color:${pctColor(h.pct)}">${h.pct}%</b></td>
-          <td>${h.pacientes}</td><td>${h.leitos}</td><td>${h.leitos-h.pacientes}</td>
-          <td><span class="badge ${st.cls}">${st.label}</span></td>
-        </tr>`;
-      }).join("")}</tbody>
-    </table>
-    ${unitHistory.length>30?`<div style="text-align:center;padding:8px;font-size:11px;color:var(--muted)">Mostrando 30 de ${unitHistory.length} registros</div>`:""}`;
-  }
-
-  modal.classList.add("open");
-  document.body.style.overflow = "hidden";
+// ── REALTIME LISTENER (todos veem os mesmos dados)
+function startRealtimeListener(){
+  const q=query(collection(db,COL),orderBy("timestamp","asc"));
+  onSnapshot(q,(snap)=>{
+    allHistory=snap.docs.map(d=>{return{id:d.id,...d.data()};});
+    if(allHistory.length>0){
+      const last=allHistory[allHistory.length-1];
+      renderAll(last,allHistory);
+      renderHistory(allHistory);
+      if(!isAdmin()){
+        const d=new Date(last.timestamp);
+        document.getElementById("update-info").innerHTML=`Última captura: <b>${d.toLocaleDateString("pt-BR")} às ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</b> — Atualização em tempo real ✅`;
+      }
+    } else {
+      document.getElementById("update-info").innerHTML="Nenhum dado disponível ainda. Aguardando captura do administrador.";
+    }
+  });
 }
 
-function closeModal(e) {
-  if (e.target === document.getElementById("unit-modal")) closeModalBtn();
-}
-function closeModalBtn() {
-  document.getElementById("unit-modal").classList.remove("open");
-  document.body.style.overflow = "";
-}
-// ESC key closes modal
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeModalBtn(); });
+// ── INIT
+updateAdminUI();
+startAutoRefresh();
+startRealtimeListener();
 </script>
 </body>
 </html>
