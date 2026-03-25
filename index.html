@@ -138,8 +138,9 @@ footer{text-align:right;font-size:11px;color:#94A3B8;padding-bottom:20px;line-he
     🔄 Próxima atualização: <b id="countdown" style="color:#1A6FBF">60:00</b>
   </div>
   <button class="btn btn-login" id="btn-login" onclick="doLogin()">🔐 Admin</button>
-  <div id="admin-btns" style="display:none;gap:8px;align-items:center">
+  <div id="admin-btns" style="display:none;gap:8px;align-items:center;flex-wrap:wrap">
     <button class="btn btn-ghost" onclick="clearHistory()">🗑 Limpar</button>
+    <button class="btn btn-ghost" onclick="exportarDados()" style="color:#1A6FBF;border-color:#BFDBFE">📊 Exportar CSV</button>
     <button class="btn btn-primary" id="btn-fetch" onclick="fetchData()">📥 Capturar Dados</button>
   </div>
 </div>
@@ -199,9 +200,16 @@ footer{text-align:right;font-size:11px;color:#94A3B8;padding-bottom:20px;line-he
       <canvas id="barChart" height="280"></canvas>
     </div>
     <div class="chart-card">
-      <div class="ch-title">Histórico — Média Diária</div>
-      <div class="ch-sub">Evolução da ocupação geral ao longo dos dias</div>
-      <canvas id="lineChart" height="280"></canvas>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px">
+        <div>
+          <div class="ch-title">Histórico — Média Diária</div>
+          <div class="ch-sub">Evolução da ocupação geral ao longo dos dias</div>
+        </div>
+        <button onclick="expandChart()" style="background:#EFF6FF;border:1px solid #BFDBFE;color:#1A6FBF;border-radius:7px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:600">⛶ Expandir</button>
+      </div>
+      <div id="lineChart-wrapper" style="overflow-x:auto;overflow-y:hidden">
+        <canvas id="lineChart" height="260"></canvas>
+      </div>
     </div>
   </div>
 
@@ -221,6 +229,21 @@ footer{text-align:right;font-size:11px;color:#94A3B8;padding-bottom:20px;line-he
   </footer>
 </main>
 
+<!-- EXPANDED CHART MODAL -->
+<div id="expand-modal" style="display:none;position:fixed;inset:0;background:rgba(11,37,69,.7);backdrop-filter:blur(4px);z-index:2000;align-items:center;justify-content:center;padding:20px" onclick="closeExpandModal(event)">
+  <div style="background:#fff;border-radius:18px;width:95vw;max-width:1200px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.3)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#0B2545;text-transform:uppercase;letter-spacing:.08em">Histórico — Média Diária</div>
+        <div style="font-size:11px;color:#64748B;margin-top:2px">Navegue pelo histórico completo arrastando o gráfico</div>
+      </div>
+      <button onclick="closeExpandModal()" style="background:#F1F5F9;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;font-size:13px;font-weight:600">✕ Fechar</button>
+    </div>
+    <div style="overflow-x:auto;overflow-y:hidden">
+      <canvas id="expandChart" height="320"></canvas>
+    </div>
+  </div>
+</div>
 <!-- MODAL -->
 <div class="modal-overlay" id="unit-modal" onclick="closeModal(event)">
   <div class="modal" id="modal-inner">
@@ -408,14 +431,44 @@ function renderLineChart(history){
   destroyChart("lineChart");
   if(!history.length)return;
   const {labels,data,counts}=getDailyAvg(history);
+  // Make chart scrollable if many data points
+  const chartContainer = document.getElementById("lineChart").parentElement;
+  const minWidth = Math.max(labels.length * 50, chartContainer.offsetWidth);
+  document.getElementById("lineChart").style.minWidth = minWidth + "px";
+  chartContainer.style.overflowX = "auto";
+  chartContainer.style.overflowY = "hidden";
+
   CH.lineChart=new Chart(document.getElementById("lineChart").getContext("2d"),{
-    type:"line",data:{labels,datasets:[{label:"Média Diária",data,borderColor:"#1A6FBF",
+    type:"line",
+    data:{labels,datasets:[{label:"Média Diária",data,borderColor:"#1A6FBF",
       backgroundColor:"rgba(26,111,191,0.08)",borderWidth:2.5,
-      pointRadius:labels.length>30?0:4,pointBackgroundColor:"#1A6FBF",fill:true,tension:0.4}]},
-    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{
-      label:c=>` Média: ${c.parsed.y}%`,afterLabel:c=>` (${counts[c.dataIndex]} captura${counts[c.dataIndex]>1?"s":""})`}}},
-      scales:{y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#F1F5F9"}},
-        x:{ticks:{font:{size:9},maxRotation:45,maxTicksLimit:15},grid:{display:false}}}}
+      pointRadius:5,pointBackgroundColor:"#1A6FBF",
+      pointHoverRadius:8,fill:true,tension:0.4,
+      datalabels:{display:true}}]},
+    options:{
+      responsive:false,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          label:c=>` Média: ${c.parsed.y}%`,
+          afterLabel:c=>` (${counts[c.dataIndex]} captura${counts[c.dataIndex]>1?"s":""})`
+        }},
+        datalabels:{
+          display:true,
+          color:"#1A6FBF",
+          font:{size:10,weight:"bold"},
+          formatter:v=>v+"%",
+          anchor:"top",
+          align:"top",
+          offset:4
+        }
+      },
+      scales:{
+        y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#F1F5F9"}},
+        x:{ticks:{font:{size:9},maxRotation:45},grid:{display:false}}
+      }
+    }
   });
 }
 
@@ -446,7 +499,10 @@ window.toggleHistory=function(){
 // ── FIREBASE OPS
 window.clearHistory=async function(){
   if(!isAdmin()){doLogin();return;}
-  if(!confirm("Apagar todo o histórico?"))return;
+  if(!confirm("⚠️ ATENÇÃO!\n\nVocê está prestes a apagar TODO o histórico.\nEsta ação é IRREVERSÍVEL e não pode ser desfeita.\n\nDeseja continuar?"))return;
+  const pwd=prompt("Para confirmar, digite a senha de administrador:");
+  if(pwd!==ADMIN_PWD){alert("Senha incorreta. Operação cancelada.");return;}
+  if(!confirm("ÚLTIMA CONFIRMAÇÃO:\n\nTodos os dados históricos serão perdidos permanentemente.\n\nTem absoluta certeza?"))return;
   try{
     const snap=await getDocs(collection(db,COL));
     await Promise.all(snap.docs.map(d=>deleteDoc(doc(db,COL,d.id))));
@@ -518,12 +574,66 @@ window.openUnitModal=function(unitName){
   if(mL)mL.destroy();if(mD)mD.destroy();if(mB)mB.destroy();
   if(uh.length){
     const ud=(()=>{const bd={};uh.forEach(h=>{const k=new Date(h.timestamp).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});if(!bd[k])bd[k]=[];bd[k].push(h.pct)});const l=Object.keys(bd);return{lbls:l,vals:l.map(k=>Math.round(bd[k].reduce((a,v)=>a+v,0)/bd[k].length)),cnts:l.map(k=>bd[k].length)}})();
-    mL=new Chart(document.getElementById("m-line-chart").getContext("2d"),{type:"line",data:{labels:ud.lbls,datasets:[{label:"Média",data:ud.vals,borderColor:"#1A6FBF",backgroundColor:"rgba(26,111,191,0.08)",borderWidth:2.5,pointRadius:ud.lbls.length>30?0:4,fill:true,tension:0.4}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` Média: ${c.parsed.y}%`,afterLabel:c=>` (${ud.cnts[c.dataIndex]} capturas)`}}},scales:{y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#E2E8F0"}},x:{ticks:{font:{size:9},maxRotation:45,maxTicksLimit:15},grid:{display:false}}}}});
+    const mlWrapper=document.getElementById("m-line-chart").parentElement;
+    const mlWidth=Math.max(ud.lbls.length*55,mlWrapper.offsetWidth||600);
+    document.getElementById("m-line-chart").style.minWidth=mlWidth+"px";
+    mlWrapper.style.overflowX="auto";mlWrapper.style.overflowY="hidden";
+    mL=new Chart(document.getElementById("m-line-chart").getContext("2d"),{type:"line",
+      data:{labels:ud.lbls,datasets:[{label:"Média",data:ud.vals,borderColor:"#1A6FBF",
+        backgroundColor:"rgba(26,111,191,0.08)",borderWidth:2.5,
+        pointRadius:5,pointBackgroundColor:"#1A6FBF",pointHoverRadius:8,
+        fill:true,tension:0.4}]},
+      options:{responsive:false,maintainAspectRatio:false,
+        plugins:{legend:{display:false},
+          tooltip:{callbacks:{label:c=>` Média: ${c.parsed.y}%`,afterLabel:c=>` (${ud.cnts[c.dataIndex]} capturas)`}}},
+        scales:{y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#E2E8F0"}},
+          x:{ticks:{font:{size:9},maxRotation:45},grid:{display:false}}}}});
     const vz=uh.filter(h=>h.pct===0).length,bx=uh.filter(h=>h.pct>0&&h.pct<=LOW_PCT).length,nm=uh.filter(h=>h.pct>LOW_PCT&&h.pct<WARN_PCT).length,at=uh.filter(h=>h.pct>=WARN_PCT&&h.pct<ALERT_PCT).length,cr=uh.filter(h=>h.pct>=ALERT_PCT&&h.pct<=100).length,sp=uh.filter(h=>h.pct>100).length;
-    mD=new Chart(document.getElementById("m-donut-chart").getContext("2d"),{type:"doughnut",data:{labels:["Vazio","Baixa","Normal","Atenção","Crítico","Superlotado"],datasets:[{data:[vz,bx,nm,at,cr,sp],backgroundColor:["#94A3B8","#0E8A8A","#1A8A5A","#C77B1A","#C0392B","#6B3FA0"],borderWidth:2,borderColor:"#fff",hoverOffset:6}]},options:{responsive:true,cutout:"60%",plugins:{legend:{position:"bottom",labels:{font:{size:10},boxWidth:10}},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed} capturas`}}}}});
+    mD=new Chart(document.getElementById("m-donut-chart").getContext("2d"),{type:"doughnut",
+      data:{labels:["Vazio","Baixa","Normal","Atenção","Crítico","Superlotado"],
+        datasets:[{data:[vz,bx,nm,at,cr,sp],
+          backgroundColor:["#94A3B8","#0E8A8A","#1A8A5A","#C77B1A","#C0392B","#6B3FA0"],
+          borderWidth:2,borderColor:"#fff",hoverOffset:6}]},
+      options:{responsive:true,cutout:"55%",
+        plugins:{
+          legend:{position:"bottom",labels:{font:{size:10},boxWidth:10,
+            generateLabels:chart=>{
+              const ds=chart.data.datasets[0];
+              return chart.data.labels.map((l,i)=>({
+                text:`${l}: ${ds.data[i]}`,
+                fillStyle:ds.backgroundColor[i],
+                strokeStyle:ds.borderColor,
+                lineWidth:ds.borderWidth,
+                index:i
+              }));
+            }
+          }},
+          tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed} capturas (${Math.round(c.parsed/uh.length*100)}%)`}}
+        }}});
     const wd=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);wd.push(d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"}));}
     const wv=wd.map(day=>{const s=uh.filter(h=>new Date(h.timestamp).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"})===day);return s.length?Math.round(s.reduce((a,h)=>a+h.pct,0)/s.length):null;});
-    mB=new Chart(document.getElementById("m-bar-chart").getContext("2d"),{type:"line",data:{labels:wd.map(d=>d.substring(0,5)),datasets:[{label:"Média",data:wv,borderColor:"#1A6FBF",backgroundColor:"rgba(26,111,191,0.08)",borderWidth:2.5,pointRadius:5,pointBackgroundColor:wv.map(v=>v===null?"transparent":pctColor(v)),fill:true,tension:0.4,spanGaps:true}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y!==null?` Média: ${c.parsed.y}%`:" Sem dados"}}},scales:{y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#E2E8F0"}},x:{ticks:{font:{size:10}},grid:{display:false}}}}});
+    mB=new Chart(document.getElementById("m-bar-chart").getContext("2d"),{type:"line",
+      data:{labels:wd.map(d=>d.substring(0,5)),
+        datasets:[{label:"Média",data:wv,borderColor:"#1A6FBF",
+          backgroundColor:"rgba(26,111,191,0.08)",borderWidth:2.5,
+          pointRadius:6,pointBackgroundColor:wv.map(v=>v===null?"transparent":pctColor(v||0)),
+          pointHoverRadius:9,fill:true,tension:0.4,spanGaps:true}]},
+      options:{responsive:true,
+        plugins:{
+          legend:{display:false},
+          tooltip:{callbacks:{label:c=>c.parsed.y!==null?` Média: ${c.parsed.y}%`:" Sem dados"}},
+          datalabels:{
+            display:ctx=>ctx.dataset.data[ctx.dataIndex]!==null,
+            color:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v?pctColor(v):"transparent";},
+            font:{size:11,weight:"bold"},
+            formatter:v=>v!==null?v+"%":"",
+            anchor:"top",align:"top",offset:4
+          }
+        },
+        scales:{
+          y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#E2E8F0"}},
+          x:{ticks:{font:{size:10}},grid:{display:false}}
+        }}});
   }
   const mhc=document.getElementById("modal-hist-container"),mhb=document.getElementById("modal-hist-btn");
   if(uh.length){const rev=[...uh].reverse().slice(0,30);document.getElementById("modal-hist-container").innerHTML=`<table class="modal-hist-table"><thead><tr><th>Data/Hora</th><th>% Ocup.</th><th>Pacientes</th><th>Leitos</th><th>Disponíveis</th><th>Status</th></tr></thead><tbody>${rev.map(h=>{const st=getStatus(h.pct);const d=new Date(h.timestamp);return`<tr><td><b>${d.toLocaleDateString("pt-BR")} ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</b></td><td><b style="color:${pctColor(h.pct)}">${h.pct}%</b></td><td>${h.pacientes}</td><td>${h.leitos}</td><td>${h.leitos-h.pacientes}</td><td><span class="badge ${st.cls}">${st.label}</span></td></tr>`;}).join("")}</tbody></table>`; }
@@ -554,6 +664,105 @@ function startRealtimeListener(){
     }
   });
 }
+
+// ── EXPORT CSV
+window.exportarDados=function(){
+  if(!allHistory.length){alert("Sem dados para exportar.");return;}
+  const headers=["Data/Hora","Fonte","Ocupação Geral %","Total Pacientes","Total Leitos","Disponíveis","Unidades Críticas"];
+  const rows=allHistory.map(h=>{
+    const t=h.units.reduce((a,u)=>a+u.leitos,0);
+    const p=h.units.reduce((a,u)=>a+u.pacientes,0);
+    const pct=t>0?Math.round((p/t)*100):0;
+    const crit=h.units.filter(u=>getPct(u)>=ALERT_PCT).length;
+    const d=new Date(h.timestamp);
+    return [
+      d.toLocaleDateString("pt-BR")+" "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),
+      h.fetchedLive?"AO VIVO":"SNAPSHOT",
+      pct+"%",p,t,t-p,crit
+    ];
+  });
+  // Add unit detail rows
+  const unitHeaders=["","Unidade","Leitos","Pacientes","% Ocupação"];
+  let csv="﻿"+headers.join(";")+"
+";
+  allHistory.forEach(h=>{
+    const t=h.units.reduce((a,u)=>a+u.leitos,0);
+    const p=h.units.reduce((a,u)=>a+u.pacientes,0);
+    const pct=t>0?Math.round((p/t)*100):0;
+    const crit=h.units.filter(u=>getPct(u)>=ALERT_PCT).length;
+    const d=new Date(h.timestamp);
+    csv+=[
+      d.toLocaleDateString("pt-BR")+" "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),
+      h.fetchedLive?"AO VIVO":"SNAPSHOT",
+      pct+"%",p,t,t-p,crit
+    ].join(";")+"
+";
+  });
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=`HMIPV_historico_${new Date().toLocaleDateString("pt-BR").replace(/\//g,"-")}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+// ── EXPAND CHART
+let expandChartInst=null;
+window.expandChart=function(){
+  const modal=document.getElementById("expand-modal");
+  modal.style.display="flex";
+  document.body.style.overflow="hidden";
+  if(expandChartInst)expandChartInst.destroy();
+  if(!allHistory.length)return;
+  const {labels,data,counts}=getDailyAvg(allHistory);
+  const canvas=document.getElementById("expandChart");
+  const wrapper=canvas.parentElement;
+  const minW=Math.max(labels.length*60,wrapper.offsetWidth||800);
+  canvas.style.width=minW+"px";
+  canvas.style.minWidth=minW+"px";
+  expandChartInst=new Chart(canvas.getContext("2d"),{
+    type:"line",
+    data:{labels,datasets:[{label:"Média Diária",data,borderColor:"#1A6FBF",
+      backgroundColor:"rgba(26,111,191,0.08)",borderWidth:2.5,
+      pointRadius:5,pointBackgroundColor:data.map(v=>pctColor(v)),
+      pointHoverRadius:9,fill:true,tension:0.4}]},
+    options:{responsive:false,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          label:c=>` Média: ${c.parsed.y}%`,
+          afterLabel:c=>` (${counts[c.dataIndex]} captura${counts[c.dataIndex]>1?"s":""})`
+        }}
+      },
+      scales:{
+        y:{min:0,max:115,ticks:{callback:v=>v+"%",font:{size:11}},grid:{color:"#F1F5F9"}},
+        x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}
+      }}
+  });
+  // Add value labels manually
+  setTimeout(()=>{
+    const ctx=canvas.getContext("2d");
+    const chart=expandChartInst;
+    ctx.font="bold 11px DM Sans";
+    ctx.fillStyle="#1A6FBF";
+    ctx.textAlign="center";
+    data.forEach((v,i)=>{
+      const meta=chart.getDatasetMeta(0);
+      if(meta.data[i]){
+        const x=meta.data[i].x;
+        const y=meta.data[i].y-12;
+        ctx.fillText(v+"%",x,y);
+      }
+    });
+  },100);
+};
+window.closeExpandModal=function(e){
+  if(!e||e.target===document.getElementById("expand-modal")){
+    document.getElementById("expand-modal").style.display="none";
+    document.body.style.overflow="";
+  }
+};
 
 // ── INIT
 updateAdminUI();
