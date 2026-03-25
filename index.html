@@ -683,8 +683,8 @@ window.exportarDados=function(){
   });
   // Add unit detail rows
   const unitHeaders=["","Unidade","Leitos","Pacientes","% Ocupação"];
-  let csv="﻿"+headers.join(";")+"
-";
+  const nl="\n";
+  let csv="\uFEFF"+headers.join(";")+nl;
   allHistory.forEach(h=>{
     const t=h.units.reduce((a,u)=>a+u.leitos,0);
     const p=h.units.reduce((a,u)=>a+u.pacientes,0);
@@ -695,8 +695,7 @@ window.exportarDados=function(){
       d.toLocaleDateString("pt-BR")+" "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),
       h.fetchedLive?"AO VIVO":"SNAPSHOT",
       pct+"%",p,t,t-p,crit
-    ].join(";")+"
-";
+    ].join(";")+nl;
   });
   const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
   const url=URL.createObjectURL(blob);
