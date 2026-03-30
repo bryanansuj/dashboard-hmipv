@@ -285,7 +285,14 @@ function parseUnits(units){
 // AUTH
 function isAdmin(){return sessionStorage.getItem("hmipv_admin")==="yes";}
 window.doLogin=function(){const pwd=prompt("Senha de administrador:");if(pwd===ADMIN_PWD){sessionStorage.setItem("hmipv_admin","yes");updateAdminUI();}else alert("Senha incorreta.");};
-function updateAdminUI(){document.getElementById("admin-btns").style.display=isAdmin()?"flex":"none";document.getElementById("btn-login").style.display=isAdmin()?"none":"inline-flex";}
+function updateAdminUI(){
+  document.getElementById("admin-btns").style.display=isAdmin()?"flex":"none";
+  document.getElementById("btn-login").style.display=isAdmin()?"none":"inline-flex";
+  // Show/hide delete column in history
+  const delCol=document.getElementById("del-col");
+  if(delCol)delCol.style.display=isAdmin()?"table-cell":"none";
+  document.querySelectorAll(".del-cell").forEach(c=>c.style.display=isAdmin()?"table-cell":"none");
+}
 
 // KPI HELPERS
 function calc7dAvg(h){const cut=new Date(Date.now()-7*864e5);const r=h.filter(x=>new Date(x.timestamp)>=cut);if(!r.length)return null;const v=r.map(x=>{const t=x.units.reduce((a,u)=>a+u.leitos,0);const p=x.units.reduce((a,u)=>a+u.pacientes,0);return t>0?(p/t)*100:0;});return Math.round(v.reduce((a,x)=>a+x,0)/v.length);}
@@ -414,7 +421,7 @@ function renderHistory(history){
   const c=document.getElementById("history-container");
   if(!history.length){c.innerHTML='<div class="empty-state"><div class="icon">🗂</div>Nenhuma captura salva ainda.</div>';return;}
   const rev=[...history].reverse().slice(0,50);
-  c.innerHTML=`<table class="history-table"><thead><tr><th>Data/Hora</th><th>Ocupação</th><th>Pacientes</th><th>Leitos</th><th>Disponíveis</th><th>Críticas</th><th>Fonte</th></tr></thead><tbody>${rev.map(h=>{const t=h.units.reduce((a,u)=>a+u.leitos,0),p=h.units.reduce((a,u)=>a+u.pacientes,0);const pct=t>0?Math.round((p/t)*100):0,crit=h.units.filter(u=>getPct(u)>=ALERT_PCT).length;const d=new Date(h.timestamp);return`<tr><td><b>${d.toLocaleDateString("pt-BR")} ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</b></td><td><b style="color:${pctColor(pct)}">${pct}%</b></td><td>${p}</td><td>${t}</td><td>${t-p}</td><td>${crit>0?`<span style="color:#C0392B;font-weight:600">${crit}</span>`:`<span style="color:#1A8A5A">0</span>`}</td><td><span class="badge ${h.fetchedLive?"bn":"bw"}">${h.fetchedLive?"AO VIVO":"SNAPSHOT"}</span></td></tr>`;}).join("")}</tbody></table>${history.length>50?`<div style="text-align:center;padding:10px;font-size:11px;color:#94A3B8">Mostrando 50 de ${history.length} registros</div>`:""}`;
+  c.innerHTML=`<table class="history-table"><thead><tr><th>Data/Hora</th><th>Ocupação</th><th>Pacientes</th><th>Leitos</th><th>Disponíveis</th><th>Críticas</th><th>Fonte</th><th id='del-col' style='display:none'>Ação</th></tr></thead><tbody>${rev.map(h=>{const t=h.units.reduce((a,u)=>a+u.leitos,0),p=h.units.reduce((a,u)=>a+u.pacientes,0);const pct=t>0?Math.round((p/t)*100):0,crit=h.units.filter(u=>getPct(u)>=ALERT_PCT).length;const d=new Date(h.timestamp);return`<tr><td><b>${d.toLocaleDateString("pt-BR")} ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</b></td><td><b style="color:${pctColor(pct)}">${pct}%</b></td><td>${p}</td><td>${t}</td><td>${t-p}</td><td>${crit>0?`<span style="color:#C0392B;font-weight:600">${crit}</span>`:`<span style="color:#1A8A5A">0</span>`}</td><td><span class="badge ${h.fetchedLive?"bn":"bw"}">${h.fetchedLive?"AO VIVO":"SNAPSHOT"}</span></td><td class="del-cell" style="display:none;text-align:center"><button onclick="deleteSnapshot('${h.id}')" style="background:#FFF5F5;border:1px solid #FED7D7;color:#C0392B;border-radius:6px;padding:3px 8px;cursor:pointer;font-size:11px;font-weight:600">🗑</button></td></tr>`;}).join("")}</tbody></table>${history.length>50?`<div style="text-align:center;padding:10px;font-size:11px;color:#94A3B8">Mostrando 50 de ${history.length} registros</div>`:""}`;
 }
 
 window.toggleHistory=function(){const c=document.getElementById("history-container"),b=document.getElementById("toggle-hist-btn");const h=c.style.display==="none";c.style.display=h?"block":"none";b.textContent=h?"▲ Ocultar":"▼ Mostrar";};
@@ -535,6 +542,18 @@ window.closeExpandModal=function(e){
     document.getElementById("expand-modal").style.display="none";
     document.body.style.overflow="";
     if(expandChartInst){expandChartInst.destroy();expandChartInst=null;}
+  }
+};
+
+// DELETE SINGLE SNAPSHOT
+window.deleteSnapshot=async function(id){
+  if(!isAdmin())return;
+  if(!confirm("Excluir esta captura? Esta ação não pode ser desfeita."))return;
+  try{
+    await deleteDoc(doc(db,COL,id));
+    // Firebase onSnapshot will automatically update the UI
+  }catch(e){
+    alert("Erro ao excluir: "+e.message);
   }
 };
 
