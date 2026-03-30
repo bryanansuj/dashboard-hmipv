@@ -6,6 +6,8 @@
 <title>HMIPV — Dashboard de Ocupação</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
 <style>
 :root{--bg:#F0F4F8;--surface:#fff;--navy:#0B2545;--navy2:#13376E;--blue:#1A6FBF;--green:#1A8A5A;--amber:#C77B1A;--red:#C0392B;--purple:#6B3FA0;--text:#1A2733;--muted:#64748B;--border:#DDE4EE;--r:14px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -171,8 +173,11 @@ footer{text-align:right;font-size:11px;color:#94A3B8;padding-bottom:20px;line-he
     </div>
     <div class="chart-card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px">
-        <div><div class="ch-title">Histórico — Média Diária</div><div class="ch-sub">Evolução da ocupação geral ao longo dos dias</div></div>
-        <button onclick="expandChart()" style="background:#EFF6FF;border:1px solid #BFDBFE;color:#1A6FBF;border-radius:7px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:600">⛶ Expandir</button>
+        <div><div class="ch-title">Histórico — Média Diária</div><div class="ch-sub">Scroll para zoom · Arraste para navegar</div></div>
+        <div style="display:flex;gap:6px">
+          <button onclick="resetZoom('lineChart')" style="background:#F0FDF4;border:1px solid #BBF7D0;color:#1A8A5A;border-radius:7px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:600">↺ Reset</button>
+          <button onclick="expandChart()" style="background:#EFF6FF;border:1px solid #BFDBFE;color:#1A6FBF;border-radius:7px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:600">⛶ Expandir</button>
+        </div>
       </div>
       <canvas id="lineChart" height="260"></canvas>
     </div>
@@ -226,8 +231,11 @@ footer{text-align:right;font-size:11px;color:#94A3B8;padding-bottom:20px;line-he
       <div class="modal-charts">
         <div class="mchart full">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-            <div><div class="mct">Histórico de Ocupação</div><div class="mcs">Média diária ao longo do tempo</div></div>
-            <button onclick="expandModalChart()" style="background:#EFF6FF;border:1px solid #BFDBFE;color:#1A6FBF;border-radius:7px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:600;white-space:nowrap">⛶ Expandir</button>
+            <div><div class="mct">Histórico de Ocupação</div><div class="mcs">Scroll para zoom · Arraste para navegar</div></div>
+            <div style="display:flex;gap:5px">
+              <button onclick="resetZoom('m-line-chart')" style="background:#F0FDF4;border:1px solid #BBF7D0;color:#1A8A5A;border-radius:7px;padding:3px 8px;font-size:10px;cursor:pointer;font-weight:600">↺ Reset</button>
+              <button onclick="expandModalChart()" style="background:#EFF6FF;border:1px solid #BFDBFE;color:#1A6FBF;border-radius:7px;padding:3px 8px;font-size:10px;cursor:pointer;font-weight:600;white-space:nowrap">⛶ Expandir</button>
+            </div>
           </div>
           <canvas id="m-line-chart" height="160"></canvas>
         </div>
@@ -399,7 +407,14 @@ function makeLineChart(canvasId,labels,data,counts,opts={}){
       responsive:opts.responsive!==false,
       maintainAspectRatio:opts.maintainAspectRatio!==false,
       layout:{padding:{top:28,right:30,left:5,bottom:5}},
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y!=null?` Média: ${c.parsed.y}%`:" ",afterLabel:c=>counts&&c.dataIndex<counts.length&&counts[c.dataIndex]>0?` (${counts[c.dataIndex]} captura${counts[c.dataIndex]>1?"s":""})`:" "}}},
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.parsed.y!=null?` Média: ${c.parsed.y}%`:" ",afterLabel:c=>counts&&c.dataIndex<counts.length&&counts[c.dataIndex]>0?` (${counts[c.dataIndex]} captura${counts[c.dataIndex]>1?"s":""})`:" "}},
+        zoom:{
+          zoom:{wheel:{enabled:true},pinch:{enabled:true},mode:"x"},
+          pan:{enabled:true,mode:"x"}
+        }
+      },
       scales:{
         y:{min:minV,max:maxV,ticks:{callback:v=>v+"%",font:{size:10}},grid:{color:"#F1F5F9"}},
         x:{ticks:{font:{size:9},maxRotation:45,maxTicksLimit:opts.maxTicks||15},grid:{display:false}}
@@ -543,6 +558,16 @@ window.closeExpandModal=function(e){
     document.body.style.overflow="";
     if(expandChartInst){expandChartInst.destroy();expandChartInst=null;}
   }
+};
+
+// RESET ZOOM
+window.resetZoom=function(canvasId){
+  // Find chart by canvas id
+  const canvas=document.getElementById(canvasId);
+  if(!canvas)return;
+  // Chart.js stores instance on canvas
+  const chartId=Object.keys(Chart.instances).find(k=>Chart.instances[k].canvas===canvas);
+  if(chartId)Chart.instances[chartId].resetZoom();
 };
 
 // DELETE SINGLE SNAPSHOT
