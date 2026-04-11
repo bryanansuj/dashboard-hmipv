@@ -142,6 +142,7 @@ footer{text-align:right;font-size:11px;color:#94A3B8;padding-bottom:20px;line-he
   <div class="update-info" id="update-info">Conectando ao banco de dados...</div>
   <div style="font-size:11px;color:#64748B;display:flex;align-items:center;gap:5px;white-space:nowrap">🔄 Próxima atualização: <b id="countdown" style="color:#1A6FBF">60:00</b></div>
   <button class="btn btn-login" id="btn-login" onclick="doLogin()">🔐 Admin</button>
+  <button class="btn btn-primary" id="btn-fetch-public" onclick="fetchData()">🔄 Atualizar</button>
   <div id="admin-btns" style="display:none;gap:8px;align-items:center;flex-wrap:wrap">
     <button class="btn btn-ghost" onclick="clearHistory()">🗑 Limpar</button>
     <button class="btn btn-ghost" onclick="exportarDados()" style="color:#1A6FBF;border-color:#BFDBFE">📊 Exportar CSV</button>
@@ -189,7 +190,7 @@ footer{text-align:right;font-size:11px;color:#94A3B8;padding-bottom:20px;line-he
     </div>
     <div id="history-container" style="display:none;margin-top:14px"><div class="empty-state"><div class="icon">🗂</div>Nenhuma captura salva ainda.</div></div>
   </div>
-  <footer>HMIPV · Dashboard de Ocupação · Direção Executiva · Dados salvos localmente neste navegador<br>Desenvolvido por Bryan Ansuj, Kaline Calduro, Lauren Ruas e Marcelo Lucho</footer>
+  <footer>HMIPV · Dashboard de Ocupação · Direção Executiva · Dados salvos na nuvem (Firebase)<br>Desenvolvido por Bryan Ansuj, Kaline Calduro, Lauren Ruas e Marcelo Lucho</footer>
 </main>
 
 <!-- MODALS -->
@@ -431,13 +432,30 @@ function renderLineChart(history){
   CH.lineChart=makeLineChart("lineChart",labels,data,counts);
 }
 
+let histPage=1;const HIST_PER_PAGE=50;
 function renderHistory(history){
   document.getElementById("hist-count-pill").textContent=`${history.length} registros`;
   const c=document.getElementById("history-container");
   if(!history.length){c.innerHTML='<div class="empty-state"><div class="icon">🗂</div>Nenhuma captura salva ainda.</div>';return;}
-  const rev=[...history].reverse().slice(0,50);
-  c.innerHTML=`<table class="history-table"><thead><tr><th>Data/Hora</th><th>Ocupação</th><th>Pacientes</th><th>Leitos</th><th>Disponíveis</th><th>Críticas</th><th>Fonte</th><th id='del-col' style='display:none'>Ação</th></tr></thead><tbody>${rev.map(h=>{const t=h.units.reduce((a,u)=>a+u.leitos,0),p=h.units.reduce((a,u)=>a+u.pacientes,0);const pct=t>0?Math.round((p/t)*100):0,crit=h.units.filter(u=>getPct(u)>=ALERT_PCT).length;const d=new Date(h.timestamp);return`<tr><td><b>${d.toLocaleDateString("pt-BR")} ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</b></td><td><b style="color:${pctColor(pct)}">${pct}%</b></td><td>${p}</td><td>${t}</td><td>${t-p}</td><td>${crit>0?`<span style="color:#C0392B;font-weight:600">${crit}</span>`:`<span style="color:#1A8A5A">0</span>`}</td><td><span class="badge ${h.fetchedLive?"bn":"bw"}">${h.fetchedLive?"AO VIVO":"SNAPSHOT"}</span></td><td class="del-cell" style="display:none;text-align:center"><button onclick="deleteSnapshot('${h.id}')" style="background:#FFF5F5;border:1px solid #FED7D7;color:#C0392B;border-radius:6px;padding:3px 8px;cursor:pointer;font-size:11px;font-weight:600">🗑</button></td></tr>`;}).join("")}</tbody></table>${history.length>50?`<div style="text-align:center;padding:10px;font-size:11px;color:#94A3B8">Mostrando 50 de ${history.length} registros</div>`:""}`;
+  const rev=[...history].reverse();
+  const totalPages=Math.ceil(rev.length/HIST_PER_PAGE);
+  if(histPage>totalPages)histPage=totalPages;
+  const pageData=rev.slice((histPage-1)*HIST_PER_PAGE,histPage*HIST_PER_PAGE);
+  
+  // Pagination controls
+  const pagination=totalPages>1?`
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-top:1px solid #F1F5F9">
+      <button onclick="histGoPage(1)" ${histPage===1?"disabled":""} style="padding:4px 8px;border-radius:6px;border:1px solid #DDE4EE;background:${histPage===1?"#F8FAFC":"#fff"};cursor:pointer;font-size:11px">«</button>
+      <button onclick="histGoPage(${histPage-1})" ${histPage===1?"disabled":""} style="padding:4px 8px;border-radius:6px;border:1px solid #DDE4EE;background:${histPage===1?"#F8FAFC":"#fff"};cursor:pointer;font-size:11px">‹</button>
+      <span style="font-size:12px;color:#64748B">Página <b>${histPage}</b> de <b>${totalPages}</b> — ${history.length} registros</span>
+      <button onclick="histGoPage(${histPage+1})" ${histPage===totalPages?"disabled":""} style="padding:4px 8px;border-radius:6px;border:1px solid #DDE4EE;background:${histPage===totalPages?"#F8FAFC":"#fff"};cursor:pointer;font-size:11px">›</button>
+      <button onclick="histGoPage(${totalPages})" ${histPage===totalPages?"disabled":""} style="padding:4px 8px;border-radius:6px;border:1px solid #DDE4EE;background:${histPage===totalPages?"#F8FAFC":"#fff"};cursor:pointer;font-size:11px">»</button>
+    </div>`:"";
+
+  c.innerHTML=`<table class="history-table"><thead><tr><th>Data/Hora</th><th>Ocupação</th><th>Pacientes</th><th>Leitos</th><th>Disponíveis</th><th>Críticas</th><th>Fonte</th><th id='del-col' style='display:none'>Ação</th></tr></thead><tbody>${pageData.map(h=>{const t=h.units.reduce((a,u)=>a+u.leitos,0),p=h.units.reduce((a,u)=>a+u.pacientes,0);const pct=t>0?Math.round((p/t)*100):0,crit=h.units.filter(u=>getPct(u)>=ALERT_PCT).length;const d=new Date(h.timestamp);return`<tr><td><b>${d.toLocaleDateString("pt-BR")} ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</b></td><td><b style="color:${pctColor(pct)}">${pct}%</b></td><td>${p}</td><td>${t}</td><td>${t-p}</td><td>${crit>0?`<span style="color:#C0392B;font-weight:600">${crit}</span>`:`<span style="color:#1A8A5A">0</span>`}</td><td><span class="badge ${h.fetchedLive?"bn":"bw"}">${h.fetchedLive?"AO VIVO":"SNAPSHOT"}</span></td><td class="del-cell" style="display:none;text-align:center"><button onclick="deleteSnapshot('${h.id}')" style="background:#FFF5F5;border:1px solid #FED7D7;color:#C0392B;border-radius:6px;padding:3px 8px;cursor:pointer;font-size:11px;font-weight:600">🗑</button></td></tr>`;}).join("")}</tbody></table>${pagination}`;
+  updateAdminUI();
 }
+window.histGoPage=function(p){histPage=p;renderHistory(allHistory);};
 
 window.toggleHistory=function(){const c=document.getElementById("history-container"),b=document.getElementById("toggle-hist-btn");const h=c.style.display==="none";c.style.display=h?"block":"none";b.textContent=h?"▲ Ocultar":"▼ Mostrar";};
 
@@ -452,8 +470,7 @@ window.clearHistory=async function(){
 };
 
 window.fetchData=async function(){
-  if(!isAdmin()){doLogin();return;}
-  const btn=document.getElementById("btn-fetch");
+  const btn=document.getElementById("btn-fetch")||document.getElementById("btn-fetch-public");
   btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Buscando...';
   let units=[],live=false,sd=new Date().toLocaleString("pt-BR");
   try{
@@ -478,8 +495,22 @@ window.fetchData=async function(){
 
 // AUTO REFRESH
 let secLeft=3600,cdTimer=null,arTimer=null;
-function startCountdown(){secLeft=3600;if(cdTimer)clearInterval(cdTimer);cdTimer=setInterval(()=>{secLeft--;if(secLeft<=0)secLeft=3600;const el=document.getElementById("countdown");if(el)el.textContent=`${String(Math.floor(secLeft/60)).padStart(2,"0")}:${String(secLeft%60).padStart(2,"0")}`;},1000);}
-function startAutoRefresh(){if(arTimer)clearInterval(arTimer);arTimer=setInterval(()=>{if(isAdmin())window.fetchData();},3600000);startCountdown();}
+function startCountdown(){
+  // Sync with Apps Script which runs at :03 every hour
+  if(cdTimer)clearInterval(cdTimer);
+  function updateCountdown(){
+    const now=new Date();
+    const nextRun=new Date(now);
+    nextRun.setMinutes(3,0,0);
+    if(now.getMinutes()>=3)nextRun.setHours(nextRun.getHours()+1);
+    secLeft=Math.round((nextRun-now)/1000);
+    const el=document.getElementById("countdown");
+    if(el)el.textContent=`${String(Math.floor(secLeft/60)).padStart(2,"0")}:${String(secLeft%60).padStart(2,"0")}`;
+  }
+  updateCountdown();
+  cdTimer=setInterval(updateCountdown,1000);
+}
+function startAutoRefresh(){if(arTimer)clearInterval(arTimer);arTimer=setInterval(()=>{startRealtimeListener();},3600000);startCountdown();}
 
 // MODAL
 let mL=null,mD=null,mB=null;
