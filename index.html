@@ -399,15 +399,15 @@ function renderAll(snap,history){
 function makeLineChart(canvasId,labels,data,counts,opts={}){
   const realData=data.filter(v=>v!=null);
   const minV=realData.length?Math.max(0,Math.min(...realData)-10):0;
-  // Add extra space above max for labels (labels are drawn ~18px above point)
-  const maxV=realData.length?Math.min(130,Math.max(...realData)+20):115;
+  // Add generous space above max for labels - no upper limit cap
+  const maxV=realData.length?Math.max(...realData)+25:115;
   return new Chart(document.getElementById(canvasId).getContext("2d"),{
     type:"line",
     data:{labels,datasets:[{label:"Média Diária",data,borderColor:"#1A6FBF",backgroundColor:"rgba(26,111,191,0.08)",borderWidth:2.5,pointRadius:5,pointBackgroundColor:data.map(v=>v!=null?pctColor(v):"transparent"),pointHoverRadius:8,fill:true,tension:0.4,spanGaps:false}]},
     options:{
       responsive:opts.responsive!==false,
       maintainAspectRatio:opts.maintainAspectRatio!==false,
-      layout:{padding:{top:28,right:30,left:5,bottom:5}},
+      layout:{padding:{top:32,right:30,left:5,bottom:5}},
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:c=>c.parsed.y!=null?` Média: ${c.parsed.y}%`:" ",afterLabel:c=>counts&&c.dataIndex<counts.length&&counts[c.dataIndex]>0?` (${counts[c.dataIndex]} captura${counts[c.dataIndex]>1?"s":""})`:" "}},
